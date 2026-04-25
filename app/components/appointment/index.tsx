@@ -74,6 +74,19 @@ export default function AppointmentForm() {
       if (data.success) {
         setStatus('success')
         setServerMsg(data.message)
+        
+        // 1. Construct WhatsApp message
+        const waNumber = '918102175261'
+        const text = `*New Appointment Request*%0A%0A` +
+          `*Name:* ${form.name}%0A` +
+          `*Phone:* ${form.phone}%0A` +
+          `*Service:* ${form.service}%0A` +
+          `*Date:* ${form.preferred_date}%0A` +
+          `*Message:* ${form.message || 'N/A'}`
+        
+        // 2. Open WhatsApp in new tab
+        window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank')
+
         setForm(INITIAL)
         setErrors({})
       } else {
