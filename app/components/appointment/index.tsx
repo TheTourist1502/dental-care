@@ -63,41 +63,27 @@ export default function AppointmentForm() {
     }
 
     setStatus('loading')
-    try {
-      const res = await fetch('/api/appointment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(parsed.data),
-      })
-      const data = await res.json()
+    
+    // For static export (Cloudflare), we handle everything client-side
+    setTimeout(() => {
+      setStatus('success')
+      setServerMsg('Redirecting to WhatsApp...')
+      
+      // 1. Construct WhatsApp message
+      const waNumber = '918102175261'
+      const text = `*New Appointment Request*%0A%0A` +
+        `*Name:* ${form.name}%0A` +
+        `*Phone:* ${form.phone}%0A` +
+        `*Service:* ${form.service}%0A` +
+        `*Date:* ${form.preferred_date}%0A` +
+        `*Message:* ${form.message || 'N/A'}`
+      
+      // 2. Open WhatsApp in new tab
+      window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank')
 
-      if (data.success) {
-        setStatus('success')
-        setServerMsg(data.message)
-        
-        // 1. Construct WhatsApp message
-        const waNumber = '918102175261'
-        const text = `*New Appointment Request*%0A%0A` +
-          `*Name:* ${form.name}%0A` +
-          `*Phone:* ${form.phone}%0A` +
-          `*Service:* ${form.service}%0A` +
-          `*Date:* ${form.preferred_date}%0A` +
-          `*Message:* ${form.message || 'N/A'}`
-        
-        // 2. Open WhatsApp in new tab
-        window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank')
-
-        setForm(INITIAL)
-        setErrors({})
-      } else {
-        setStatus('error')
-        setServerMsg(data.message || 'Something went wrong.')
-        if (data.errors) setErrors(data.errors)
-      }
-    } catch {
-      setStatus('error')
-      setServerMsg('Network error. Please try again.')
-    }
+      setForm(INITIAL)
+      setErrors({})
+    }, 800)
   }
 
   return (
