@@ -1,0 +1,146 @@
+.section {
+  padding: 100px 0;
+  background: var(--bg-secondary);
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  composes: container from global;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.imgCol {
+  position: relative;
+}
+
+.doctorImg {
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  height: 500px;
+  border: 1px solid var(--border-primary);
+}
+
+.expBadge {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  background: var(--bg-primary);
+  opacity: 0.8;
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border: 1px solid var(--border-primary);
+}
+
+.expNum {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.expLabel {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.textCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.tagline {
+  color: var(--apple-blue);
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.heading {
+  composes: section-title from global;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.para {
+  composes: body-primary from global;
+  margin-bottom: 1.25rem;
+  font-size: 19px;
+  color: var(--text-secondary);
+}
+
+.quals {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.quals li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 17px;
+  color: var(--text-primary);
+}
+
+
+.checkIcon {
+  color: var(--apple-blue);
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.btnPrimary {
+  composes: btn btn-primary from global;
+  align-self: flex-start;
+}
+
+@media (max-width: 1199px) {
+  .container {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 991px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .doctorImg {
+    height: 400px;
+  }
+  
+  .section {
+    padding: 80px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .heading {
+    font-size: 32px;
+  }
+  
+  .doctorImg {
+    height: 350px;
+  }
+}
+
+@media (max-width: 575px) {
+  .expBadge {
+    padding: 12px;
+    bottom: 1rem;
+    left: 1rem;
+  }
+  
+  .expNum {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,148 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px;
+  overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--hero-bg) 0%, transparent 100%);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.content {
+  composes: container from global;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tagline {
+  color: var(--hero-tagline);
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heading {
+  composes: hero-title from global;
+  color: var(--hero-text);
+  margin-bottom: 1.5rem;
+}
+
+.accent {
+  background: linear-gradient(180deg, #fff 0%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.sub {
+  composes: body-primary from global;
+  color: var(--hero-subtext);
+  max-width: 600px;
+  margin-bottom: 2.5rem;
+  font-size: 21px;
+}
+
+.btns {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.btnPrimary {
+  composes: btn btn-primary from global;
+  padding: 18px 36px;
+  font-size: 21px;
+}
+
+.btnSecondary {
+  composes: btn btn-link from global;
+  color: var(--hero-tagline);
+  font-size: 21px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.visual {
+  position: relative;
+  margin-top: 4rem;
+  width: 100%;
+  max-width: 1000px;
+  height: 400px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card {
+  display: none; /* Simplification for Apple style */
+}
+
+@media (max-width: 991px) {
+  .hero {
+    padding: 80px 20px;
+  }
+  
+  .tagline {
+    font-size: 19px;
+  }
+  
+  .sub {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 767px) {
+  .btns {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .btnPrimary {
+    width: 100%;
+  }
+  
+  .visual {
+    height: 300px;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero {
+    padding: 60px 20px;
+  }
+  
+  .tagline {
+    font-size: 17px;
+  }
+  
+  .sub {
+    font-size: 17px;
+  }
+}

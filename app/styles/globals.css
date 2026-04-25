@@ -1,0 +1,223 @@
+:root {
+  /* Breakpoints Reference:
+     Mobile (S):    0px - 575px
+     Mobile (L):    576px - 767px
+     Tablet:        768px - 991px
+     Laptop:        992px - 1199px
+     Desktop:       1200px - 1399px
+     Large Desktop: 1400px+
+  */
+
+  /* Apple Palette - Light Mode Default */
+  --black: #000000;
+  --pale-gray: #f5f5f7;
+  --near-black: #1d1d1f;
+  
+  /* Secondary & Accent */
+  --apple-blue: #0071e3;
+  --link-blue: #0066cc;
+  --high-lume-blue: #2997ff;
+  
+  /* Surface & Background */
+  --pure-white: #ffffff;
+  
+  /* Neutrals */
+  --secondary-gray: #6e6e73;
+  --soft-border: rgba(0, 0, 0, 0.1);
+  --mid-border: #86868b;
+  
+  /* Layout */
+  --container-width: 980px;
+  --container-padding: 20px;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+  --radius-pill: 980px;
+
+  /* Theme-aware variables (Light Default) */
+  --bg-primary: var(--pure-white);
+  --bg-secondary: var(--pale-gray);
+  --text-primary: var(--near-black);
+  --text-secondary: var(--secondary-gray);
+  --border-primary: var(--soft-border);
+  
+  /* Accent Gradient */
+  --heading-accent: linear-gradient(180deg, #0071e3 0%, #00c6ff 100%);
+  
+  /* Hero Variables (Dynamic) */
+  --hero-bg: var(--bg-primary);
+  --hero-text: var(--text-primary);
+  --hero-subtext: var(--text-secondary);
+  --hero-tagline: var(--apple-blue);
+}
+
+@media (min-width: 1200px) {
+  :root { --container-width: 1120px; }
+}
+
+@media (min-width: 1400px) {
+  :root { --container-width: 1320px; }
+}
+
+[data-theme='dark'] {
+  --bg-primary: #000000;
+  --bg-secondary: #1c1c1e;
+  --text-primary: #f5f5f7;
+  --text-secondary: #86868b;
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --soft-border: rgba(255, 255, 255, 0.1);
+  --near-black: #f5f5f7;
+  --pure-white: #000000;
+  --pale-gray: #1c1c1e;
+  
+  --heading-accent: linear-gradient(180deg, #fff 0%, #a1a1a1 100%);
+  
+  --hero-bg: #000000;
+  --hero-text: #ffffff;
+  --hero-subtext: #86868b;
+  --hero-tagline: var(--high-lume-blue);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.47;
+  letter-spacing: -0.022em;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Typography Helpers */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-weight: 600;
+  color: inherit;
+  letter-spacing: -0.003em;
+}
+
+.hero-title {
+  font-size: clamp(48px, 8vw, 80px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.section-title {
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.003em;
+}
+
+.body-primary {
+  font-size: 17px;
+  line-height: 1.47;
+  color: var(--text-secondary);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  font-size: 17px;
+  font-weight: 400;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .btn {
+    padding: 10px 18px;
+    font-size: 15px;
+  }
+}
+
+.btn-primary {
+  background: var(--apple-blue);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0077ed;
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: var(--near-black);
+  color: var(--pure-white);
+}
+
+.btn-secondary:hover {
+  background: var(--black);
+}
+
+.btn-link {
+  color: var(--apple-blue);
+  background: transparent;
+  padding: 0;
+  font-weight: 400;
+}
+
+.btn-link:hover {
+  opacity: 0.8;
+}
+
+/* Utility Classes */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.section-padding {
+  padding: 100px 0;
+}
+
+.accent {
+  background: var(--heading-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+@media (max-width: 991px) {
+  .section-padding {
+    padding: 80px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .section-padding {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .section-padding {
+    padding: 40px 0;
+  }
+}
