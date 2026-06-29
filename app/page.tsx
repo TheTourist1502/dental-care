@@ -13,7 +13,7 @@ const Gallery = dynamic(() => import('./components/gallery'), { ssr: true })
 const AppointmentForm = dynamic(() => import('./components/appointment'), { ssr: true })
 const Location = dynamic(() => import('./components/location'), { ssr: true })
 const Footer = dynamic(() => import('./components/footer'), { ssr: true })
-const WhatsAppFAB = dynamic(() => import('./components/whatsapp-fab'), { ssr: false })
+import WhatsAppFAB from './components/whatsapp-fab/client-loader'
 
 export default function Home() {
   return (

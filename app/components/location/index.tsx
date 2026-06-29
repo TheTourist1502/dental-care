@@ -11,6 +11,7 @@ const CONTACT = [
   { icon: 'solar:letter-linear', title: 'Email', detail: 'contact@drmariadental.in' },
 ]
 
+const MAPS_URL = 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29'
 const MAPS_SRC = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7368.2494!2d88.4834423!3d22.5761589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a020b6ce769f3d5%3A0x1448ee176a9d3c05!2sDr%20Maria\'s%20Multi-speciality%20Dental%20Clinic%2C%20Behind%20Unitech%20gate2!5e0!3m2!1sen!2sin!4v1714030403040!5m2!1sen!2sin'
 
 export default function Location() {
@@ -59,7 +60,7 @@ export default function Location() {
           </div>
 
           <a
-            href={MAPS_SRC}
+            href={MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.btnPrimary}
