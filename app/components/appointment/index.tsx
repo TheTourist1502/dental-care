@@ -1,90 +1,144 @@
 'use client'
 import { Icon } from '@iconify/react'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { appointmentSchema, type AppointmentInput } from '@/lib/validations'
+import { bookingSchema, normalizePhone } from '@/lib/validations'
+import { CLINIC, TIME_SLOTS, buildWhatsAppUrl } from '@/lib/clinic'
+import Calendar, { formatDisplayDate } from '@/app/components/ui/calendar'
+import Dropdown from '@/app/components/ui/dropdown'
 import styles from './index.module.css'
 
-const SERVICES = [
-  'General Checkup',
-  'Teeth Cleaning',
-  'Dental Implants',
-  'Cosmetic Dentistry',
-  'Orthodontics',
-  'Root Canal',
-  'Pediatric Dentistry',
-]
+// Free tier: 250 submissions/month — get a key at https://web3forms.com
+// and put it in .env.local as NEXT_PUBLIC_WEB3FORMS_KEY, then rebuild.
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? ''
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit'
 
 const WHY_ITEMS = [
   { icon: 'solar:clock-circle-linear', title: 'Minimal Wait Times', desc: 'Punctual appointments — your time is respected.' },
-  { icon: 'solar:card-2-linear', title: 'All Insurance Accepted', desc: 'We work with all major insurance providers.' },
   { icon: 'solar:calendar-minimalistic-linear', title: 'Evening & Weekend Slots', desc: 'Flexible hours to fit your busy schedule.' },
-  { icon: 'solar:chat-round-dots-linear', title: 'WhatsApp Confirmations', desc: 'Instant booking confirmations on WhatsApp.' },
+  { icon: 'solar:chat-round-dots-linear', title: 'WhatsApp Confirmations', desc: 'We confirm your slot on call or WhatsApp within an hour.' },
+  { icon: 'solar:shield-check-linear', title: 'No Advance Payment', desc: 'Pay at the clinic after your visit — book risk-free.' },
 ]
 
-type FormState = Omit<AppointmentInput, 'service'> & { service: string }
+type Form = { name: string; phone: string; date: string; timeSlot: string }
+const INITIAL: Form = { name: '', phone: '', date: '', timeSlot: '' }
+type Status = 'idle' | 'sending' | 'sent' | 'fallback'
 
-const INITIAL: FormState = {
-  name: '',
-  phone: '',
-  email: '',
-  service: '',
-  preferred_date: '',
-  message: '',
+function slotStart(slot: string): { h: number; m: number } {
+  const match = slot.match(/(\d+):(\d+)\s*(AM|PM)/i)
+  if (!match) return { h: 10, m: 0 }
+  let h = Number(match[1]) % 12
+  if (match[3].toUpperCase() === 'PM') h += 12
+  return { h, m: Number(match[2]) }
+}
+
+function downloadIcs(form: Form) {
+  const { h, m } = slotStart(form.timeSlot)
+  const [y, mo, d] = form.date.split('-').map(Number)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const stamp = (dt: Date) =>
+    `${dt.getFullYear()}${pad(dt.getMonth() + 1)}${pad(dt.getDate())}T${pad(dt.getHours())}${pad(dt.getMinutes())}00`
+  const start = new Date(y, mo - 1, d, h, m)
+  const end = new Date(start.getTime() + 60 * 60 * 1000)
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Dr Maria Dental//Booking//EN',
+    'BEGIN:VEVENT',
+    `UID:${Date.now()}@drmariadental.in`,
+    `DTSTAMP:${stamp(new Date())}`,
+    `DTSTART:${stamp(start)}`,
+    `DTEND:${stamp(end)}`,
+    `SUMMARY:Dental appointment — ${CLINIC.shortName}`,
+    `LOCATION:${CLINIC.address}`,
+    `DESCRIPTION:Requested slot ${form.timeSlot}. The clinic will confirm on ${CLINIC.phoneDisplay}.`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n')
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }))
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'dr-maria-appointment.ics'
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 export default function AppointmentForm() {
-  const [form, setForm] = useState<FormState>(INITIAL)
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [serverMsg, setServerMsg] = useState('')
+  const [form, setForm] = useState<Form>(INITIAL)
+  const [errors, setErrors] = useState<Partial<Record<keyof Form, string>>>({})
+  const [status, setStatus] = useState<Status>('idle')
 
   const sectionRef = useRef(null)
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
 
-  const today = new Date().toISOString().split('T')[0]
+  const minDate = new Date()
+  minDate.setHours(0, 0, 0, 0)
+  const maxDate = new Date(minDate)
+  maxDate.setMonth(maxDate.getMonth() + 2)
 
-  function set(field: keyof FormState, value: string) {
+  function set(field: keyof Form, value: string) {
     setForm((f) => ({ ...f, [field]: value }))
     if (errors[field]) setErrors((e) => ({ ...e, [field]: undefined }))
   }
 
-  async function handleSubmit() {
-    const parsed = appointmentSchema.safeParse(form)
+  function whatsAppMessage() {
+    return (
+      `New Appointment Request\n\n` +
+      `Name: ${form.name}\n` +
+      `Phone: +91 ${normalizePhone(form.phone)}\n` +
+      `Date: ${formatDisplayDate(form.date)}\n` +
+      `Time: ${form.timeSlot}`
+    )
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    const parsed = bookingSchema.safeParse(form)
     if (!parsed.success) {
       const flat = parsed.error.flatten().fieldErrors
       const mapped: typeof errors = {}
       for (const [k, v] of Object.entries(flat)) {
-        mapped[k as keyof FormState] = (v as string[])[0]
+        mapped[k as keyof Form] = (v as string[])[0]
       }
       setErrors(mapped)
       return
     }
 
-    setStatus('loading')
-    
-    // For static export (Cloudflare), we handle everything client-side
-    setTimeout(() => {
-      setStatus('success')
-      setServerMsg('Redirecting to WhatsApp...')
-      
-      // 1. Construct WhatsApp message
-      const waNumber = '918102175261'
-      const text = `*New Appointment Request*%0A%0A` +
-        `*Name:* ${form.name}%0A` +
-        `*Phone:* ${form.phone}%0A` +
-        `*Service:* ${form.service}%0A` +
-        `*Date:* ${form.preferred_date}%0A` +
-        `*Message:* ${form.message || 'N/A'}`
-      
-      // 2. Open WhatsApp in new tab
-      window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank')
+    if (!WEB3FORMS_KEY) {
+      // Email not configured — hand the lead to WhatsApp instead of losing it.
+      setStatus('fallback')
+      return
+    }
 
-      setForm(INITIAL)
-      setErrors({})
-    }, 800)
+    setStatus('sending')
+    try {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `New appointment — ${form.name} — ${formatDisplayDate(form.date)}`,
+          from_name: 'Dr. Maria Dental Website',
+          name: form.name,
+          phone: `+91 ${normalizePhone(form.phone)}`,
+          appointment_date: formatDisplayDate(form.date),
+          time_slot: form.timeSlot,
+        }),
+      })
+      const data = await res.json()
+      setStatus(data.success ? 'sent' : 'fallback')
+    } catch {
+      setStatus('fallback')
+    }
   }
+
+  function reset() {
+    setForm(INITIAL)
+    setErrors({})
+    setStatus('idle')
+  }
+
+  const submitted = status === 'sent' || status === 'fallback'
 
   return (
     <section className={styles.section} id="appointment" ref={sectionRef}>
@@ -94,14 +148,14 @@ export default function AppointmentForm() {
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <span className={styles.tagline}>Get in Touch</span>
+          <span className={styles.tagline}>Book an Appointment</span>
           <h2 className={styles.heading}>
-            Book Your <br />
-            <span className="accent">Consultation.</span>
+            Reserve Your <br />
+            <span className="accent">Slot.</span>
           </h2>
           <p className={styles.sub}>
-            Schedule your visit in under 2 minutes. Our team will confirm your
-            slot within 1 hour.
+            Book in under a minute — just your name, number and a time that
+            suits you. We&apos;ll confirm on call or WhatsApp within an hour.
           </p>
 
           <div className={styles.whyList}>
@@ -131,83 +185,110 @@ export default function AppointmentForm() {
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.1 }}
         >
-          <div className={styles.row}>
-            <Field label="Full Name" error={errors.name}>
-              <input
-                type="text"
-                placeholder="Name"
-                value={form.name}
-                onChange={(e) => set('name', e.target.value)}
-                className={errors.name ? styles.inputError : styles.input}
-              />
-            </Field>
-            <Field label="Phone" error={errors.phone}>
-              <input
-                type="tel"
-                placeholder="+91"
-                value={form.phone}
-                onChange={(e) => set('phone', e.target.value)}
-                className={errors.phone ? styles.inputError : styles.input}
-              />
-            </Field>
-          </div>
+          {submitted ? (
+            <div className={styles.confirmPanel} role="status">
+              <div className={styles.confirmIcon}>
+                <Icon
+                  icon={status === 'sent' ? 'solar:check-circle-bold' : 'solar:chat-round-dots-bold'}
+                  width={44}
+                  height={44}
+                />
+              </div>
+              <h3 className={styles.confirmTitle}>
+                {status === 'sent' ? 'Request received!' : 'One more tap'}
+              </h3>
+              <p className={styles.confirmText}>
+                {status === 'sent'
+                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on ${'+91 ' + normalizePhone(form.phone)} shortly.`
+                  : 'We could not send your request automatically. Send it on WhatsApp instead — it takes one tap and your details are pre-filled.'}
+              </p>
+              <div className={styles.confirmActions}>
+                <a
+                  href={buildWhatsAppUrl(whatsAppMessage())}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.confirmWhatsApp}
+                >
+                  <Icon icon="ic:baseline-whatsapp" width={20} height={20} />
+                  {status === 'sent' ? 'Chat with us on WhatsApp' : 'Send via WhatsApp'}
+                </a>
+                {status === 'sent' && (
+                  <button type="button" className={styles.confirmGhost} onClick={() => downloadIcs(form)}>
+                    <Icon icon="solar:calendar-add-linear" width={18} height={18} />
+                    Add to calendar
+                  </button>
+                )}
+                <button type="button" className={styles.confirmLink} onClick={reset}>
+                  Book another appointment
+                </button>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} noValidate>
+              <Field label="Full Name" htmlFor="bk-name" error={errors.name}>
+                <input
+                  id="bk-name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={(e) => set('name', e.target.value)}
+                  className={errors.name ? styles.inputError : styles.input}
+                />
+              </Field>
 
-          <Field label="Email Address" error={errors.email}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={(e) => set('email', e.target.value)}
-              className={errors.email ? styles.inputError : styles.input}
-            />
-          </Field>
+              <Field label="Phone Number" htmlFor="bk-phone" error={errors.phone}>
+                <input
+                  id="bk-phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel"
+                  placeholder="10-digit mobile number"
+                  value={form.phone}
+                  onChange={(e) => set('phone', e.target.value)}
+                  className={errors.phone ? styles.inputError : styles.input}
+                />
+              </Field>
 
-          <div className={styles.row}>
-            <Field label="Service" error={errors.service}>
-              <select
-                value={form.service}
-                onChange={(e) => set('service', e.target.value)}
-                className={errors.service ? styles.inputError : styles.input}
+              <div className={styles.row}>
+                <Field label="Preferred Date" htmlFor="bk-date" error={errors.date}>
+                  <Calendar
+                    id="bk-date"
+                    value={form.date}
+                    onChange={(iso) => set('date', iso)}
+                    placeholder="Pick a date"
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    invalid={Boolean(errors.date)}
+                  />
+                </Field>
+                <Field label="Time Slot" htmlFor="bk-slot" error={errors.timeSlot}>
+                  <Dropdown
+                    id="bk-slot"
+                    options={TIME_SLOTS}
+                    value={form.timeSlot}
+                    onChange={(slot) => set('timeSlot', slot)}
+                    placeholder="Choose a slot"
+                    invalid={Boolean(errors.timeSlot)}
+                  />
+                </Field>
+              </div>
+
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                disabled={status === 'sending'}
               >
-                <option value="">Select service</option>
-                {SERVICES.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Preferred Date" error={errors.preferred_date}>
-              <input
-                type="date"
-                min={today}
-                value={form.preferred_date}
-                onChange={(e) => set('preferred_date', e.target.value)}
-                className={errors.preferred_date ? styles.inputError : styles.input}
-              />
-            </Field>
-          </div>
+                {status === 'sending' ? 'Booking…' : 'Book Appointment'}
+              </button>
 
-          <Field label="Message (optional)" error={errors.message}>
-            <textarea
-              placeholder="How can we help?"
-              value={form.message}
-              onChange={(e) => set('message', e.target.value)}
-              className={`${errors.message ? styles.inputError : styles.input} ${styles.textarea}`}
-            />
-          </Field>
-
-          <button
-            className={styles.submitBtn}
-            onClick={handleSubmit}
-            disabled={status === 'loading'}
-          >
-            {status === 'loading' ? 'Sending...' : 'Request Appointment'}
-          </button>
-
-          {status === 'success' && (
-            <div className={styles.success}>{serverMsg}</div>
-          )}
-          {status === 'error' && (
-            <div className={styles.errorBanner}>{serverMsg}</div>
+              <p className={styles.privacyNote}>
+                No account, no advance payment. Your details go directly to the
+                clinic and are never stored on this website.
+              </p>
+            </form>
           )}
         </motion.div>
       </div>
@@ -217,18 +298,24 @@ export default function AppointmentForm() {
 
 function Field({
   label,
+  htmlFor,
   error,
   children,
 }: {
   label: string
+  htmlFor: string
   error?: string
   children: React.ReactNode
 }) {
   return (
     <div className={styles.field}>
-      <label className={styles.label}>{label}</label>
+      <label className={styles.label} htmlFor={htmlFor}>
+        {label}
+      </label>
       {children}
-      {error && <span className={styles.errorText}>{error}</span>}
+      <span className={styles.errorText} aria-live="polite">
+        {error}
+      </span>
     </div>
   )
 }

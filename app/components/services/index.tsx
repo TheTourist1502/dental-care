@@ -18,7 +18,7 @@ const SERVICES = [
     tag: null,
   },
   {
-    icon: 'solar:screw-driver-linear',
+    icon: 'solar:bolt-circle-linear',
     title: 'Dental Implants',
     desc: 'Permanent tooth replacement with titanium implants. Natural look, natural feel, lasting results.',
     tag: 'Speciality',

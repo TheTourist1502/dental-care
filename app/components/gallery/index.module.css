@@ -1,6 +1,6 @@
 .section {
-  padding: 100px 0;
-  background: var(--bg-primary);
+  padding: var(--space-section) 0;
+  background: var(--color-canvas);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,35 +12,42 @@
 }
 
 .tagline {
-  color: var(--apple-blue);
-  font-size: 19px;
+  color: var(--color-primary);
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
 }
 
 .heading {
   composes: section-title from global;
-  margin-bottom: 60px;
-  color: var(--text-primary);
+  margin-bottom: 48px;
+  color: var(--color-ink);
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto auto;
-  gap: 20px;
+  gap: 16px;
   width: 100%;
 }
 
 .item {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  transition: box-shadow 0.2s ease;
 }
 
+.item:hover {
+  box-shadow: var(--shadow-float);
+}
 
 .span {
   grid-column: span 2;
@@ -62,7 +69,7 @@
 }
 
 .item:hover .inner {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .emoji {
@@ -74,12 +81,12 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 40%);
+  background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%);
   display: flex;
   align-items: flex-end;
-  padding: 24px;
+  padding: 20px;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.25s ease;
 }
 
 .item:hover .overlay {
@@ -96,9 +103,7 @@
 .lightboxBg {
   position: fixed;
   inset: 0;
-  background: var(--bg-primary);
-  opacity: 0.8;
-  backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,43 +112,34 @@
 }
 
 .lightboxCard {
-  background: var(--bg-primary);
+  background: var(--color-canvas);
   border-radius: var(--radius-xl);
   overflow: hidden;
   max-width: 600px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-float);
+  border: 1px solid var(--color-hairline);
 }
 
 .lightboxImg {
   width: 100%;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-secondary);
+  height: 380px;
+  background: var(--color-surface-soft);
 }
 
 .lightboxLabel {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
-  color: var(--text-primary);
-  padding: 30px 30px 10px;
+  color: var(--color-ink);
+  padding: 24px 24px 8px;
 }
 
 .closeBtn {
-  composes: btn from global;
-  background: var(--text-primary);
-  color: var(--bg-primary);
-  margin: 20px auto 30px;
+  composes: btn btn-secondary from global;
+  margin: 16px auto 28px;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
 }
-
 
 @media (max-width: 1199px) {
   .grid {
@@ -155,12 +151,10 @@
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
   .span {
     grid-column: span 2;
     grid-row: span 1;
   }
-  
   .span .inner {
     min-height: 200px;
   }
@@ -169,9 +163,7 @@
 @media (max-width: 575px) {
   .grid {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
   }
-  
   .span {
     grid-column: span 1;
   }

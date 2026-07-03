@@ -15,6 +15,7 @@ const interTight = Inter_Tight({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://drmariadental.in'),
   title: "Best Dentist in Newtown, Kolkata | Dr. Maria's Dental Clinic",
   description:
     "Dr. Maria's Multi-speciality Dental Clinic near Unitech Gate 2, Newtown. Expert Root Canal, Implants, & Braces. Book your appointment in Kolkata today.",
@@ -27,12 +28,35 @@ export const metadata: Metadata = {
     'dental implants Kolkata',
     'pediatric dentist Newtown',
   ],
+  alternates: {
+    canonical: 'https://drmariadental.in',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   openGraph: {
     title: "Dr. Maria's Multi-Speciality Dental Clinic | Newtown, Kolkata",
     description: 'Expert dental care behind Unitech Gate 2, Newtown. Book your appointment today.',
+    url: 'https://drmariadental.in',
     type: 'website',
     locale: 'en_IN',
     siteName: "Dr. Maria's Dental Clinic",
+    images: [
+      {
+        url: '/images/clinic.webp',
+        width: 1200,
+        height: 630,
+        alt: "Dr. Maria's Multi-Speciality Dental Clinic, Newtown Kolkata",
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Best Dentist in Newtown, Kolkata | Dr. Maria's Dental Clinic",
+    description: 'Expert dental care behind Unitech Gate 2, Newtown. Book your appointment today.',
+    images: ['/images/clinic.webp'],
   },
 }
 
@@ -52,13 +76,20 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Dentist',
               name: "Dr. Maria's Multi-Speciality Dental Clinic",
-              image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09',
-              '@id': 'https://maps.app.goo.gl/8uKbdBRzh2N6zFyy9',
+              description: "Multi-speciality dental clinic in Newtown, Kolkata offering root canal treatment, dental implants, braces, pediatric dentistry and more. Located behind Unitech Gate 2, Laskarati Bazar.",
+              image: [
+                'https://drmariadental.in/images/clinic.webp',
+                'https://drmariadental.in/images/doctor.webp',
+              ],
+              '@id': 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
               url: 'https://drmariadental.in',
-              telephone: '+91 81021 75261',
+              hasMap: 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
+              telephone: '+918102175261',
+              email: 'contact@drmariadental.in',
+              priceRange: '₹₹',
               address: {
                 '@type': 'PostalAddress',
-                streetAddress: 'Laskarati Bazar, Behind Unitech Gate 2, Newtown',
+                streetAddress: 'Laskarati Bazar, Baligori Rd, Behind Unitech Gate 2, Newtown',
                 addressLocality: 'Kolkata',
                 addressRegion: 'West Bengal',
                 postalCode: '700156',
@@ -66,33 +97,38 @@ export default function RootLayout({
               },
               geo: {
                 '@type': 'GeoCoordinates',
-                latitude: 22.5855,
-                longitude: 88.4867
+                latitude: 22.5761589,
+                longitude: 88.4878267,
               },
+              areaServed: [
+                'Newtown', 'Rajarhat', 'Action Area I', 'Action Area II',
+                'Action Area III', 'New Town', 'Kolkata',
+              ],
               openingHoursSpecification: [
                 {
                   '@type': 'OpeningHoursSpecification',
                   dayOfWeek: ['Monday', 'Tuesday'],
                   opens: '16:00',
-                  closes: '21:00'
+                  closes: '21:00',
                 },
                 {
                   '@type': 'OpeningHoursSpecification',
                   dayOfWeek: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                   opens: '09:00',
-                  closes: '14:00'
+                  closes: '14:00',
                 },
                 {
                   '@type': 'OpeningHoursSpecification',
                   dayOfWeek: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                   opens: '17:00',
-                  closes: '21:00'
-                }
+                  closes: '21:00',
+                },
               ],
               sameAs: [
+                'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
                 'https://www.instagram.com/drmariadental',
-                'https://www.facebook.com/drmariadental'
-              ]
+                'https://www.facebook.com/drmariadental',
+              ],
             }),
           }}
         />

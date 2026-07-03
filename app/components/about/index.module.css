@@ -1,6 +1,6 @@
 .section {
-  padding: 100px 0;
-  background: var(--bg-secondary);
+  padding: var(--space-section) 0;
+  background: var(--color-surface-soft);
   display: flex;
   justify-content: center;
 }
@@ -18,34 +18,36 @@
 }
 
 .doctorImg {
-  background: var(--bg-primary);
+  background: var(--color-surface-strong);
   border-radius: var(--radius-xl);
   height: 500px;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--color-hairline);
 }
 
 .expBadge {
   position: absolute;
   bottom: 2rem;
   left: 2rem;
-  background: var(--bg-primary);
-  opacity: 0.8;
-  backdrop-filter: blur(20px);
+  background: var(--color-canvas);
   border-radius: var(--radius-md);
-  padding: 20px;
-  border: 1px solid var(--border-primary);
+  padding: 20px 24px;
+  border: 1px solid var(--color-hairline);
+  box-shadow: var(--shadow-float);
 }
 
 .expNum {
   font-size: 32px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--color-ink);
   line-height: 1;
+  display: block;
 }
 
 .expLabel {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--color-muted);
+  display: block;
+  margin-top: 4px;
 }
 
 .textCol {
@@ -54,23 +56,25 @@
 }
 
 .tagline {
-  color: var(--apple-blue);
-  font-size: 19px;
+  color: var(--color-primary);
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .heading {
   composes: section-title from global;
   margin-bottom: 1.5rem;
-  color: var(--text-primary);
+  color: var(--color-ink);
 }
 
 .para {
-  composes: body-primary from global;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-body);
   margin-bottom: 1.25rem;
-  font-size: 19px;
-  color: var(--text-secondary);
 }
 
 .quals {
@@ -85,13 +89,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 17px;
-  color: var(--text-primary);
+  font-size: 15px;
+  color: var(--color-ink);
 }
 
-
 .checkIcon {
-  color: var(--apple-blue);
+  color: var(--color-primary);
   width: 20px;
   height: 20px;
   flex-shrink: 0;
@@ -104,7 +107,7 @@
 
 @media (max-width: 1199px) {
   .container {
-    gap: 40px;
+    gap: 48px;
   }
 }
 
@@ -113,34 +116,24 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
   .doctorImg {
     height: 400px;
-  }
-  
-  .section {
-    padding: 80px 0;
   }
 }
 
 @media (max-width: 767px) {
-  .heading {
-    font-size: 32px;
-  }
-  
   .doctorImg {
-    height: 350px;
+    height: 320px;
   }
 }
 
 @media (max-width: 575px) {
   .expBadge {
-    padding: 12px;
+    padding: 14px 18px;
     bottom: 1rem;
     left: 1rem;
   }
-  
   .expNum {
-    font-size: 24px;
+    font-size: 26px;
   }
 }

@@ -8,9 +8,11 @@ import Hero from './components/hero'
 // Lazy load the rest
 const About = dynamic(() => import('./components/about'), { ssr: true })
 const Services = dynamic(() => import('./components/services'), { ssr: true })
-const Testimonials = dynamic(() => import('./components/testimonials'), { ssr: true })
+const Pricing = dynamic(() => import('./components/pricing'), { ssr: true })
+const Reviews = dynamic(() => import('./components/reviews'), { ssr: true })
 const Gallery = dynamic(() => import('./components/gallery'), { ssr: true })
 const AppointmentForm = dynamic(() => import('./components/appointment'), { ssr: true })
+const BlogTeaser = dynamic(() => import('./components/blog-teaser'), { ssr: true })
 const Location = dynamic(() => import('./components/location'), { ssr: true })
 const Footer = dynamic(() => import('./components/footer'), { ssr: true })
 import WhatsAppFAB from './components/whatsapp-fab/client-loader'
@@ -22,9 +24,11 @@ export default function Home() {
       <Hero />
       <About />
       <Services />
-      <Testimonials />
+      <Pricing />
+      <Reviews />
       <Gallery />
       <AppointmentForm />
+      <BlogTeaser />
       <Location />
       <Footer />
       <WhatsAppFAB />

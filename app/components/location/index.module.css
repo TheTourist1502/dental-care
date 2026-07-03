@@ -1,6 +1,6 @@
 .section {
-  padding: 100px 0;
-  background: var(--bg-primary);
+  padding: var(--space-section) 0;
+  background: var(--color-canvas);
   display: flex;
   justify-content: center;
 }
@@ -14,22 +14,25 @@
 }
 
 .tagline {
-  color: var(--apple-blue);
-  font-size: 19px;
+  color: var(--color-primary);
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
 }
 
 .heading {
   composes: section-title from global;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  color: var(--color-ink);
 }
 
 .intro {
-  composes: body-primary from global;
-  font-size: 19px;
-  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
   margin-bottom: 2.5rem;
 }
 
@@ -37,7 +40,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .contactItem {
@@ -47,21 +50,22 @@
 }
 
 .contactIcon {
-  color: var(--apple-blue);
+  color: var(--color-primary);
   flex-shrink: 0;
 }
 
 .contactTitle {
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   margin-bottom: 4px;
 }
 
 .contactDetail {
-  font-size: 17px;
-  color: var(--text-primary);
+  font-size: 15px;
+  color: var(--color-ink);
   line-height: 1.5;
 }
 
@@ -72,10 +76,11 @@
 .mapWrap {
   border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 1px solid var(--border-primary);
-  background: var(--bg-primary);
-  height: 400px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-soft);
+  height: 420px;
   position: relative;
+  box-shadow: var(--shadow-float);
 }
 
 .loader {
@@ -86,18 +91,18 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: var(--bg-primary);
+  background: var(--color-surface-soft);
   z-index: 10;
 }
 
 .spinner {
-  color: var(--apple-blue);
+  color: var(--color-primary);
   animation: rotate 1s linear infinite;
 }
 
 .loaderText {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--color-muted);
   font-weight: 500;
 }
 
@@ -109,20 +114,9 @@
 @media (max-width: 991px) {
   .container {
     grid-template-columns: 1fr;
-    gap: 60px;
+    gap: 48px;
   }
-  
   .mapWrap {
-    height: 400px;
-  }
-  
-  .section {
-    padding: 80px 0;
-  }
-}
-
-@media (max-width: 575px) {
-  .intro {
-    font-size: 17px;
+    height: 360px;
   }
 }

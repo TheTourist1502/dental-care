@@ -1,49 +1,53 @@
 import { z } from 'zod'
+import { TIME_SLOTS } from './clinic'
 
-export const appointmentSchema = z.object({
+// Strips spaces, dashes, brackets and a leading +91 / 91 / 0 so users can
+// type the number in any common format.
+export function normalizePhone(raw: string): string {
+  let digits = raw.replace(/[\s\-()]/g, '')
+  if (digits.startsWith('+91')) digits = digits.slice(3)
+  else if (digits.startsWith('91') && digits.length === 12) digits = digits.slice(2)
+  else if (digits.startsWith('0') && digits.length === 11) digits = digits.slice(1)
+  return digits
+}
+
+const INDIAN_MOBILE = /^[6-9]\d{9}$/
+
+export const bookingSchema = z.object({
   name: z
     .string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(100, 'Name too long')
-    .regex(/^[a-zA-Z\s.'-]+$/, 'Name contains invalid characters'),
+    .trim()
+    .min(2, 'Please enter your name')
+    .max(100, 'Name is too long')
+    // \p{L}\p{M} accepts names in any script (Bengali, Hindi, ...), not just A–Z
+    .regex(/^[\p{L}\p{M}\s.'-]+$/u, 'Please enter a valid name'),
 
   phone: z
     .string()
-    .regex(
-      /^(\+91[\s-]?)?[6-9]\d{9}$/,
-      'Enter a valid Indian mobile number'
+    .trim()
+    .min(1, 'Please enter your mobile number')
+    .refine(
+      (raw) => INDIAN_MOBILE.test(normalizePhone(raw)),
+      'Please enter a valid 10-digit mobile number'
     ),
 
-  email: z
+  date: z
     .string()
-    .email('Enter a valid email address')
-    .max(100, 'Email too long'),
-
-  service: z.enum([
-    'General Checkup',
-    'Teeth Cleaning',
-    'Dental Implants',
-    'Cosmetic Dentistry',
-    'Orthodontics',
-    'Root Canal',
-    'Pediatric Dentistry',
-  ]),
-
-  preferred_date: z
-    .string()
-    .refine((d) => {
-      const date = new Date(d)
+    .min(1, 'Please pick a date')
+    .refine((iso) => {
+      const picked = new Date(iso + 'T00:00:00')
       const today = new Date()
       today.setHours(0, 0, 0, 0)
-      return date >= today
-    }, 'Date cannot be in the past')
-    .refine((d) => {
-      const date = new Date(d)
-      // No appointments on Sundays past 2pm — handled server side
-      return !isNaN(date.getTime())
-    }, 'Invalid date'),
+      return !isNaN(picked.getTime()) && picked >= today
+    }, 'Please pick today or a future date'),
 
-  message: z.string().max(500, 'Message too long').optional().default(''),
+  timeSlot: z
+    .string()
+    .min(1, 'Please choose a time slot')
+    .refine(
+      (slot) => (TIME_SLOTS as readonly string[]).includes(slot),
+      'Please choose a time slot'
+    ),
 })
 
-export type AppointmentInput = z.infer<typeof appointmentSchema>
+export type BookingInput = z.infer<typeof bookingSchema>
