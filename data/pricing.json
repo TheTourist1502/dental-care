@@ -1,0 +1,95 @@
+{
+  "note": "All prices are indicative starting prices in INR. Final cost is confirmed after clinical examination. Edit this file to update pricing on the site.",
+  "items": [
+    {
+      "id": "consultation",
+      "name": "Consultation & Checkup",
+      "description": "Complete oral examination, diagnosis and treatment plan.",
+      "icon": "solar:stethoscope-linear",
+      "originalPrice": 300,
+      "price": 200,
+      "unit": "per visit",
+      "popular": false
+    },
+    {
+      "id": "scaling",
+      "name": "Scaling & Polishing",
+      "description": "Ultrasonic deep cleaning to remove plaque, tartar and stains.",
+      "icon": "solar:magic-stick-3-linear",
+      "originalPrice": 1500,
+      "price": 999,
+      "unit": "full mouth",
+      "popular": true
+    },
+    {
+      "id": "filling",
+      "name": "Composite Filling",
+      "description": "Tooth-coloured filling that blends naturally with your teeth.",
+      "icon": "solar:shield-plus-linear",
+      "originalPrice": 1800,
+      "price": 1299,
+      "unit": "per tooth",
+      "popular": false
+    },
+    {
+      "id": "rct",
+      "name": "Root Canal Treatment",
+      "description": "Painless single-visit RCT with rotary endodontics.",
+      "icon": "solar:health-linear",
+      "originalPrice": 6000,
+      "price": 4499,
+      "unit": "per tooth",
+      "popular": false
+    },
+    {
+      "id": "crown",
+      "name": "Dental Crown",
+      "description": "Durable metal-ceramic cap; zirconia options available.",
+      "icon": "solar:crown-minimalistic-linear",
+      "originalPrice": 4500,
+      "price": 3499,
+      "unit": "per tooth",
+      "popular": false
+    },
+    {
+      "id": "extraction",
+      "name": "Tooth Extraction",
+      "description": "Gentle, painless removal of damaged or decayed teeth.",
+      "icon": "solar:pen-new-round-linear",
+      "originalPrice": 1500,
+      "price": 999,
+      "unit": "per tooth",
+      "popular": false
+    },
+    {
+      "id": "whitening",
+      "name": "Teeth Whitening",
+      "description": "In-clinic professional whitening for a visibly brighter smile.",
+      "icon": "solar:star-shine-linear",
+      "originalPrice": 9000,
+      "price": 5999,
+      "unit": "full mouth",
+      "popular": false
+    },
+    {
+      "id": "implant",
+      "name": "Dental Implant",
+      "description": "Permanent titanium implant with crown — feels like a natural tooth.",
+      "icon": "solar:bolt-circle-linear",
+      "originalPrice": 35000,
+      "price": 24999,
+      "unit": "per tooth",
+      "popular": false
+    },
+    {
+      "id": "braces",
+      "name": "Braces & Aligners",
+      "description": "Metal braces for full-mouth alignment; aligner options on consult.",
+      "icon": "solar:smile-circle-linear",
+      "originalPrice": 45000,
+      "price": 29999,
+      "unit": "full treatment",
+      "popular": false
+    }
+  ]
+}
