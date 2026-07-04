@@ -124,3 +124,19 @@
     font-size: 16px;
   }
 }
+
+@media (max-width: 400px) {
+  .hero {
+    padding: 40px 16px 48px;
+  }
+  .tagline {
+    font-size: 13px;
+    text-align: center;
+  }
+  .sub {
+    font-size: 15px;
+  }
+  .visual {
+    height: 220px;
+  }
+}

@@ -33,9 +33,11 @@
   gap: 8px;
 }
 
-.logoIcon {
-  color: var(--color-primary);
-  font-size: 20px;
+.logoImg {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .links {
@@ -171,5 +173,29 @@
   }
   .drawer {
     top: 64px;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: 0 16px;
+  }
+  .logo {
+    font-size: 13.5px;
+    gap: 6px;
+  }
+  .logoImg {
+    width: 28px;
+    height: 28px;
+  }
+  .actions {
+    gap: 8px;
+  }
+  .drawer {
+    padding: 1.5rem 16px;
+  }
+  .drawerLink {
+    font-size: 19px;
+    padding: 14px 0;
   }
 }

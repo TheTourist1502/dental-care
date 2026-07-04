@@ -6,3 +6,5 @@ out
 .env.example
 .claude
 data
+.dev.vars
+.wrangler

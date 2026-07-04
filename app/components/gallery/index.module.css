@@ -168,3 +168,16 @@
     grid-column: span 1;
   }
 }
+
+@media (max-width: 400px) {
+  .inner,
+  .span .inner {
+    min-height: 170px;
+  }
+  .heading {
+    margin-bottom: 32px;
+  }
+  .lightboxImg {
+    height: 260px;
+  }
+}

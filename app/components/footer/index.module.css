@@ -136,3 +136,17 @@
     align-items: flex-start;
   }
 }
+
+@media (max-width: 400px) {
+  .grid {
+    gap: 24px;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+  .tagline {
+    max-width: 100%;
+  }
+  .bottomLinks {
+    gap: 12px;
+  }
+}

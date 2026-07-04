@@ -4,10 +4,13 @@
 export const CLINIC = {
   name: "Dr. Maria's Multi-Speciality Dental Clinic",
   shortName: "Dr. Maria's Dental",
+  // Used in the "Hi {doctorName}," admin-email greeting — confirm this
+  // matches how the doctor should be addressed before going live.
+  doctorName: 'Dr. Maria',
   phoneDisplay: '+91 81021 75261',
   phoneE164: '+918102175261',
   whatsappNumber: '918102175261',
-  email: 'contact@drmariadental.in',
+  email: 'contact.drmariadenatlclinic@gmail.com',
   address: 'Laskarati Bazar, Baligori Rd, Behind Unitech Gate 2, Newtown, Kolkata 700156',
   mapsUrl: 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
   siteUrl: 'https://drmariadental.in',

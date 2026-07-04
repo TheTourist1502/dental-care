@@ -120,3 +120,15 @@
     height: 360px;
   }
 }
+
+@media (max-width: 400px) {
+  .container {
+    gap: 32px;
+  }
+  .contactList {
+    gap: 18px;
+  }
+  .mapWrap {
+    height: 280px;
+  }
+}

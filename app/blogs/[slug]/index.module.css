@@ -141,3 +141,25 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 400px) {
+  .page {
+    padding-top: 88px;
+  }
+  .article {
+    padding: 0 16px var(--space-xxl);
+  }
+  .lead {
+    font-size: 16px;
+    padding-left: 14px;
+  }
+  .body {
+    font-size: 15.5px;
+  }
+  .cta {
+    padding: 20px;
+  }
+  .ctaTitle {
+    font-size: 17px;
+  }
+}

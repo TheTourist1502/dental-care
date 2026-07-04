@@ -58,6 +58,15 @@ export const metadata: Metadata = {
     description: 'Expert dental care behind Unitech Gate 2, Newtown. Book your appointment today.',
     images: ['/images/clinic.webp'],
   },
+  icons: {
+    icon: [
+      { url: '/images/favicon.ico' },
+      { url: '/images/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/images/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+    ],
+    apple: [{ url: '/images/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
 }
 
 export default function RootLayout({
@@ -66,8 +75,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${interTight.variable}`}>
+    <html lang="en" className={`${inter.variable} ${interTight.variable}`} suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){}})();`,
+          }}
+        />
         <link rel="preload" as="image" href="/images/hero.webp" />
         <script
           type="application/ld+json"

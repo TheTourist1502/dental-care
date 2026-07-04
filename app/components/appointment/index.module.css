@@ -124,6 +124,13 @@
   height: 110px;
 }
 
+.captchaWrap {
+  margin: 4px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .submitBtn {
   composes: btn btn-primary from global;
   width: 100%;
@@ -158,7 +165,7 @@
 }
 
 .confirmIcon {
-  color: #248a3d;
+  color: var(--color-success-text);
   margin-bottom: 16px;
 }
 
@@ -241,19 +248,19 @@
 }
 
 .success {
-  background: rgba(52, 199, 89, 0.08);
-  border: 1px solid rgba(52, 199, 89, 0.25);
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
   border-radius: var(--radius-sm);
   padding: 14px;
-  color: #248a3d;
+  color: var(--color-success-text);
   font-size: 14px;
   text-align: center;
   margin-top: 16px;
 }
 
 .errorBanner {
-  background: rgba(193, 53, 21, 0.08);
-  border: 1px solid rgba(193, 53, 21, 0.25);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
   border-radius: var(--radius-sm);
   padding: 14px;
   color: var(--color-error-text);
@@ -276,5 +283,22 @@
 @media (max-width: 575px) {
   .formWrap {
     padding: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .formWrap {
+    padding: 18px;
+  }
+  .input {
+    padding: 12px 10px;
+    height: 50px;
+  }
+  .submitBtn {
+    height: 48px;
+    font-size: 15px;
+  }
+  .whyList {
+    gap: 18px;
   }
 }

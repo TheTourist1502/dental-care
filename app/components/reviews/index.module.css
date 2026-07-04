@@ -241,3 +241,21 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 400px) {
+  .track {
+    grid-auto-columns: 100%;
+  }
+  .card {
+    padding: 18px;
+    min-height: 210px;
+  }
+  .googleLink {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  .controls {
+    gap: 14px;
+    margin-top: 20px;
+  }
+}

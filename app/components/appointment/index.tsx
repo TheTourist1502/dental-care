@@ -2,16 +2,18 @@
 import { Icon } from '@iconify/react'
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { bookingSchema, normalizePhone } from '@/lib/validations'
 import { CLINIC, TIME_SLOTS, buildWhatsAppUrl } from '@/lib/clinic'
 import Calendar, { formatDisplayDate } from '@/app/components/ui/calendar'
 import Dropdown from '@/app/components/ui/dropdown'
 import styles from './index.module.css'
 
-// Free tier: 250 submissions/month — get a key at https://web3forms.com
-// and put it in .env.local as NEXT_PUBLIC_WEB3FORMS_KEY, then rebuild.
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? ''
-const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit'
+// hCaptcha's official published TEST site key — always passes, safe for
+// dev. Get a real one free at https://dashboard.hcaptcha.com after signup
+// and set NEXT_PUBLIC_HCAPTCHA_SITE_KEY in .env.local before going live.
+const HCAPTCHA_SITE_KEY =
+  process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || '10000000-ffff-ffff-ffff-000000000001'
 
 const WHY_ITEMS = [
   { icon: 'solar:clock-circle-linear', title: 'Minimal Wait Times', desc: 'Punctual appointments — your time is respected.' },
@@ -20,8 +22,8 @@ const WHY_ITEMS = [
   { icon: 'solar:shield-check-linear', title: 'No Advance Payment', desc: 'Pay at the clinic after your visit — book risk-free.' },
 ]
 
-type Form = { name: string; phone: string; date: string; timeSlot: string }
-const INITIAL: Form = { name: '', phone: '', date: '', timeSlot: '' }
+type Form = { name: string; phone: string; email: string; date: string; timeSlot: string }
+const INITIAL: Form = { name: '', phone: '', email: '', date: '', timeSlot: '' }
 type Status = 'idle' | 'sending' | 'sent' | 'fallback'
 
 function slotStart(slot: string): { h: number; m: number } {
@@ -67,6 +69,10 @@ export default function AppointmentForm() {
   const [form, setForm] = useState<Form>(INITIAL)
   const [errors, setErrors] = useState<Partial<Record<keyof Form, string>>>({})
   const [status, setStatus] = useState<Status>('idle')
+  const [patientEmailSent, setPatientEmailSent] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [captchaError, setCaptchaError] = useState('')
+  const captchaRef = useRef<HCaptcha>(null)
 
   const sectionRef = useRef(null)
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
@@ -86,6 +92,7 @@ export default function AppointmentForm() {
       `New Appointment Request\n\n` +
       `Name: ${form.name}\n` +
       `Phone: +91 ${normalizePhone(form.phone)}\n` +
+      (form.email ? `Email: ${form.email}\n` : '') +
       `Date: ${formatDisplayDate(form.date)}\n` +
       `Time: ${form.timeSlot}`
     )
@@ -104,31 +111,59 @@ export default function AppointmentForm() {
       return
     }
 
-    if (!WEB3FORMS_KEY) {
-      // Email not configured — hand the lead to WhatsApp instead of losing it.
-      setStatus('fallback')
+    if (!captchaToken) {
+      setCaptchaError('Please complete the captcha')
       return
     }
+    setCaptchaError('')
 
     setStatus('sending')
+
+    const templateParams = {
+      // Shared
+      patient_name: form.name,
+      patient_phone: `+91 ${normalizePhone(form.phone)}`,
+      patient_email: form.email || 'Not provided',
+      to_email: form.email,
+      appointment_date: formatDisplayDate(form.date),
+      time_slot: form.timeSlot,
+      website_url: CLINIC.siteUrl,
+      logo_url: `${CLINIC.siteUrl}/images/logo.png`,
+      // Admin template only
+      doctor_name: CLINIC.doctorName,
+      admin_email: CLINIC.email,
+      booking_source: 'Website booking form',
+      submitted_at: new Date().toLocaleString('en-IN', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: 'Asia/Kolkata',
+      }),
+      // Patient template only
+      clinic_phone: CLINIC.phoneDisplay,
+      clinic_address: CLINIC.address,
+    }
+
     try {
-      const res = await fetch(WEB3FORMS_ENDPOINT, {
+      // Sending happens server-side (Cloudflare Function) so the EmailJS
+      // private key and hCaptcha secret never reach the browser, and the
+      // function can rate-limit by IP before spending a send.
+      const res = await fetch('/api/book', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: `New appointment — ${form.name} — ${formatDisplayDate(form.date)}`,
-          from_name: 'Dr. Maria Dental Website',
-          name: form.name,
-          phone: `+91 ${normalizePhone(form.phone)}`,
-          appointment_date: formatDisplayDate(form.date),
-          time_slot: form.timeSlot,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, captchaToken, templateParams }),
       })
-      const data = await res.json()
-      setStatus(data.success ? 'sent' : 'fallback')
+      const data: { success: boolean; sentTo?: 'patient' | 'admin' } = await res.json()
+      if (data.success) {
+        setPatientEmailSent(data.sentTo === 'patient')
+        setStatus('sent')
+      } else {
+        setStatus('fallback')
+      }
     } catch {
       setStatus('fallback')
+    } finally {
+      captchaRef.current?.resetCaptcha()
+      setCaptchaToken(null)
     }
   }
 
@@ -136,6 +171,10 @@ export default function AppointmentForm() {
     setForm(INITIAL)
     setErrors({})
     setStatus('idle')
+    setPatientEmailSent(false)
+    setCaptchaToken(null)
+    setCaptchaError('')
+    captchaRef.current?.resetCaptcha()
   }
 
   const submitted = status === 'sent' || status === 'fallback'
@@ -199,7 +238,8 @@ export default function AppointmentForm() {
               </h3>
               <p className={styles.confirmText}>
                 {status === 'sent'
-                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on ${'+91 ' + normalizePhone(form.phone)} shortly.`
+                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on ${'+91 ' + normalizePhone(form.phone)} shortly.` +
+                    (patientEmailSent ? ` A confirmation has also been emailed to ${form.email}.` : '')
                   : 'We could not send your request automatically. Send it on WhatsApp instead — it takes one tap and your details are pre-filled.'}
               </p>
               <div className={styles.confirmActions}>
@@ -252,6 +292,19 @@ export default function AppointmentForm() {
                 />
               </Field>
 
+              <Field label="Email (optional)" htmlFor="bk-email" error={errors.email}>
+                <input
+                  id="bk-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="For an email confirmation too"
+                  value={form.email}
+                  onChange={(e) => set('email', e.target.value)}
+                  className={errors.email ? styles.inputError : styles.input}
+                />
+              </Field>
+
               <div className={styles.row}>
                 <Field label="Preferred Date" htmlFor="bk-date" error={errors.date}>
                   <Calendar
@@ -274,6 +327,19 @@ export default function AppointmentForm() {
                     invalid={Boolean(errors.timeSlot)}
                   />
                 </Field>
+              </div>
+
+              <div className={styles.captchaWrap}>
+                <HCaptcha
+                  ref={captchaRef}
+                  sitekey={HCAPTCHA_SITE_KEY}
+                  onVerify={(token) => {
+                    setCaptchaToken(token)
+                    setCaptchaError('')
+                  }}
+                  onExpire={() => setCaptchaToken(null)}
+                />
+                {captchaError && <span className={styles.errorText}>{captchaError}</span>}
               </div>
 
               <button

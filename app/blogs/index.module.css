@@ -55,3 +55,15 @@
     padding-top: 96px;
   }
 }
+
+@media (max-width: 400px) {
+  .page {
+    padding-top: 88px;
+  }
+  .header {
+    margin-bottom: 28px;
+  }
+  .sub {
+    font-size: 15px;
+  }
+}

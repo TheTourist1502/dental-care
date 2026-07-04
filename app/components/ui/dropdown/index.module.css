@@ -110,11 +110,11 @@
 }
 
 .itemSelected {
-  background: #fff1f4;
+  background: var(--color-primary-tint);
   color: var(--color-primary);
   font-weight: 500;
 }
 
 .itemSelected.itemFocused {
-  background: #ffe4ea;
+  background: var(--color-primary-tint-strong);
 }

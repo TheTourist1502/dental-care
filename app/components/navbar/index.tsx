@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Icon } from '@iconify/react'
+import ThemeToggle from '../theme-toggle'
 import styles from './index.module.css'
 
 // section: id used by the scroll-spy on the home page; page links set page: true
@@ -63,7 +64,8 @@ export default function Navbar() {
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
-          <Icon icon="hugeicons:dental-tooth" className={styles.logoIcon} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/logo.png" alt="" width={36} height={36} className={styles.logoImg} />
           Dr. Maria&apos;s Dental
         </Link>
 
@@ -82,6 +84,8 @@ export default function Navbar() {
         </ul>
 
         <div className={styles.actions}>
+          <ThemeToggle />
+
           <Link href="/#appointment" className={styles.cta}>
             Book Now
           </Link>
@@ -129,6 +133,7 @@ export default function Navbar() {
             >
               Book Appointment
             </Link>
+            <ThemeToggle variant="full" />
           </motion.div>
         )}
       </AnimatePresence>
