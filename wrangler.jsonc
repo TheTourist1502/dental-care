@@ -10,6 +10,6 @@
   // namespace in the Cloudflare dashboard (Storage & Databases → KV) and
   // paste its real id here before deploying.
   "kv_namespaces": [
-    { "binding": "RATE_LIMIT_KV", "id": "REPLACE_WITH_REAL_KV_NAMESPACE_ID" }
+    { "binding": "RATE_LIMIT_KV", "id": "3bc8a00a962a490fb65c23903f5958ac" }
   ]
 }
