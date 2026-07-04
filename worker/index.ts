@@ -1,7 +1,8 @@
-// Cloudflare Pages Function — served at /api/book.
-// Keeps the EmailJS private key and hCaptcha secret server-side only
-// (never shipped to the browser), verifies the human, and rate-limits
-// by IP before spending an EmailJS send.
+// Cloudflare Worker entry point. Serves the static Next.js export (via
+// the ASSETS binding, pointed at `out/` in wrangler.jsonc) and handles
+// POST /api/book itself — this deploy path (Workers Static Assets)
+// doesn't support the old Pages Functions `functions/` directory file
+// routing, so every request goes through one fetch handler here.
 //
 // Local typings only (no @cloudflare/workers-types) to avoid clashing
 // with the app's own DOM-based tsconfig.
@@ -10,7 +11,12 @@ interface KVNamespace {
   put(key: string, value: string, opts?: { expirationTtl?: number }): Promise<void>
 }
 
+interface Fetcher {
+  fetch(request: Request): Promise<Response>
+}
+
 interface Env {
+  ASSETS: Fetcher
   RATE_LIMIT_KV: KVNamespace
   HCAPTCHA_SECRET: string
   EMAILJS_SERVICE_ID: string
@@ -18,11 +24,6 @@ interface Env {
   EMAILJS_PRIVATE_KEY: string
   EMAILJS_ADMIN_TEMPLATE_ID: string
   EMAILJS_PATIENT_TEMPLATE_ID: string
-}
-
-type Context = {
-  request: Request
-  env: Env
 }
 
 const MAX_REQUESTS_PER_WINDOW = 5
@@ -35,9 +36,7 @@ function json(data: unknown, status: number): Response {
   })
 }
 
-export async function onRequestPost(context: Context): Promise<Response> {
-  const { request, env } = context
-
+async function handleBook(request: Request, env: Env): Promise<Response> {
   let body: {
     email?: string
     captchaToken?: string
@@ -108,4 +107,14 @@ export async function onRequestPost(context: Context): Promise<Response> {
   }
 
   return json({ success: true, sentTo: sendToPatient ? 'patient' : 'admin' }, 200)
+}
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url)
+    if (url.pathname === '/api/book' && request.method === 'POST') {
+      return handleBook(request, env)
+    }
+    return env.ASSETS.fetch(request)
+  },
 }
