@@ -5,5 +5,3 @@ node_modules
 out
 .env.example
 .claude
-.dev.vars
-.wrangler
