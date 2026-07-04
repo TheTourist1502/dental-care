@@ -78,9 +78,16 @@ async function handleBook(request: Request, env: Env): Promise<Response> {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ secret: env.HCAPTCHA_SECRET, response: captchaToken }),
   })
-  const verifyData = (await verifyRes.json()) as { success: boolean }
+  const verifyData = (await verifyRes.json()) as { success: boolean; 'error-codes'?: string[] }
   if (!verifyData.success) {
-    return json({ success: false, message: 'Captcha verification failed' }, 400)
+    return json(
+      {
+        success: false,
+        message: 'Captcha verification failed',
+        errors: verifyData['error-codes'] || [],
+      },
+      400
+    )
   }
 
   // 3. Send via EmailJS's REST API server-side, authenticated with the
