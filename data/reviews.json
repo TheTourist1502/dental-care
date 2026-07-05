@@ -1,146 +1,138 @@
-[
-  {
-    "reviewer": "Asif Iqbal",
-    "rating": 5,
-    "date": "15-06-2026",
-    "text": "Excellent experience at Dr. Maria's Multi-speciality Dental Clinic. The Dr. is welcoming, and the care provided is top-notch. Truly satisfied with the treatment."
-  },
-  {
-    "reviewer": "Jahidul Paramanik",
-    "rating": 5,
-    "date": "22-06-2026",
-    "text": "I have got my filling from Dr Maria and I am really impressed by her work. Excellently done. Very happy with her treatment. Painfree and less time taken."
-  },
-  {
-    "reviewer": "Nasrin Sabnam Banu",
-    "rating": 5,
-    "date": "08-06-2026",
-    "text": "I was there for my RCT in here recently. Dr. Maria walked me through every step before starting, made the whole thing way less scary than I thought it'd be. Pricing was straightforward, no hidden charges or pushing extra treatments. Clinic is clean, equipment looked modern. Will deffo go back."
-  },
-  {
-    "reviewer": "Sk Sahanawaz Ahamad",
-    "rating": 5,
-    "date": "12-07-2025",
-    "text": "Dr. Maria's Multi-Speciality Dental Clinic offers exceptional dental care with a focus on patient comfort and advanced treatments. The clinic is well-equipped, ensuring high-quality procedures across various specialties."
-  },
-  {
-    "reviewer": "Afriduzzaman",
-    "rating": 5,
-    "date": "28-05-2026",
-    "text": "Got scaling done here recently, Dr. Maria was gentle and explained everything as she went. Teeth feel so much cleaner now and the price was reasonable, would recommend!"
-  },
-  {
-    "reviewer": "Rupesh Jawalkar",
-    "rating": 5,
-    "date": "19-07-2025",
-    "text": "A wonderful experience overall. Dr Maria is very knowledgeable and made sure to explain all the treatment options clearly. I really appreciated her friendly nature. The staff is equally fantastic — polite and efficient."
-  },
-  {
-    "reviewer": "Prasad Sanap",
-    "rating": 5,
-    "date": "05-07-2024",
-    "text": "One of the best dental clinics in Newtown. I recently had a root canal and scaling treatment here, it was a painless experience. Dr. Maria is very humble and professional. I had a good experience here."
-  },
-  {
-    "reviewer": "Priti Bera",
-    "rating": 5,
-    "date": "18-07-2024",
-    "text": "I recently had a root canal treatment done by Dr. Maria, and I am highly satisfied with the experience. Dr. Maria demonstrated exceptional skill and professionalism throughout the procedure. The facility was clean. Overall, a positive and pain-free dental experience."
-  },
-  {
-    "reviewer": "Ehtesham Alam",
-    "rating": 5,
-    "date": "25-07-2024",
-    "text": "Amazing experience! Had a root canal here and it was painless. The staff is friendly, the clinic is clean, and the dentist is excellent. Highly recommend! 🦷"
-  },
-  {
-    "reviewer": "Tamoha Singh",
-    "rating": 5,
-    "date": "09-08-2025",
-    "text": "My first experience at a dental clinic — very well treated and professional. Dr. is very patient and kind, and job well done."
-  },
-  {
-    "reviewer": "Afriduzzaman",
-    "rating": 5,
-    "date": "14-09-2025",
-    "text": "Doctor was quite polite and explained all the procedures. Very professional and the treatment was painless."
-  },
-  {
-    "reviewer": "Himadri Kheto",
-    "rating": 5,
-    "date": "02-07-2024",
-    "text": "Highly recommended. One of the best dental clinics in the Newtown area. Well behaved, highly professional."
-  },
-  {
-    "reviewer": "K Srikanth",
-    "rating": 5,
-    "date": "11-10-2025",
-    "text": "Had a good treatment and very friendly dentist."
-  },
-  {
-    "reviewer": "Saheli Saha",
-    "rating": 5,
-    "date": "29-06-2024",
-    "text": "Very professional and humble doctor. Without any second thought you can visit here. Overall amazing experience!"
-  },
-  {
-    "reviewer": "Sumaiya Tarannum",
-    "rating": 5,
-    "date": "16-08-2024",
-    "text": "I went to Kolkata for a trip. During that time I experienced severe gum pain. Doctor advised me scaling. Feeling better after that."
-  },
-  {
-    "reviewer": "Kencho Dorji",
-    "rating": 5,
-    "date": "23-10-2025",
-    "text": "Me and my brother are happy to get good and affordable service. Dentist is kind and friendly."
-  },
-  {
-    "reviewer": "MOHAMED MAHEER",
-    "rating": 5,
-    "date": "07-09-2024",
-    "text": "I had a root canal treatment, I'm very satisfied. Humble doctor."
-  },
-  {
-    "reviewer": "Ishtiaque Ahmed",
-    "rating": 4,
-    "date": "13-11-2024",
-    "text": "The whole procedure was painless. Doctor's visit fee is 200/-."
-  },
-  {
-    "reviewer": "Abdul Mannan Khan",
-    "rating": 5,
-    "date": "21-12-2024",
-    "text": "Best place for all oral care at a reasonable price."
-  },
-  {
-    "reviewer": "Firdus Ahmed",
-    "rating": 5,
-    "date": "04-08-2024",
-    "text": "Bahut achcha filling lagayen. (Very nice, got a good filling done.)"
-  },
-  {
-    "reviewer": "sk shahid ali",
-    "rating": 5,
-    "date": "17-10-2024",
-    "text": "Best scaling experience. Thanks to doc."
-  },
-  {
-    "reviewer": "Shadman Latif",
-    "rating": 5,
-    "date": "26-05-2024",
-    "text": "Experienced specialist and updated equipment."
-  },
-  {
-    "reviewer": "Nashidul Islam",
-    "rating": 5,
-    "date": "26-06-2026",
-    "text": "Very good experience and very helpful, thank you so much madam."
-  },
-  {
-    "reviewer": "Sultan Ul Arefin",
-    "rating": 4,
-    "date": "10-07-2024",
-    "text": "RCT koralam. Nice doctor. (Got my RCT done here — nice doctor.)"
-  }
-]
+{
+  "totalReviews": 38,
+  "rating": 4.8,
+  "reviews": [
+    {
+      "reviewer": "Asif Iqbal",
+      "rating": 5,
+      "date": "15-06-2026",
+      "text": "Excellent experience at Dr. Maria's Multi-speciality Dental Clinic. The Dr. is welcoming, and the care provided is top-notch. Truly satisfied with the treatment."
+    },
+    {
+      "reviewer": "Jahidul Paramanik",
+      "rating": 5,
+      "date": "22-06-2026",
+      "text": "I have got my filling from Dr Maria and I am really impressed by her work. Excellently done. Very happy with her treatment. Painfree and less time taken."
+    },
+    {
+      "reviewer": "Nasrin Sabnam Banu",
+      "rating": 5,
+      "date": "08-06-2026",
+      "text": "I was there for my RCT in here recently. Dr. Maria walked me through every step before starting, made the whole thing way less scary than I thought it'd be. Pricing was straightforward, no hidden charges or pushing extra treatments. Clinic is clean, equipment looked modern. Will deffo go back."
+    },
+    {
+      "reviewer": "Sk Sahanawaz Ahamad",
+      "rating": 5,
+      "date": "12-07-2025",
+      "text": "Dr. Maria's Multi-Speciality Dental Clinic offers exceptional dental care with a focus on patient comfort and advanced treatments. The clinic is well-equipped, ensuring high-quality procedures across various specialties."
+    },
+    {
+      "reviewer": "Rupesh Jawalkar",
+      "rating": 5,
+      "date": "19-07-2025",
+      "text": "A wonderful experience overall. Dr Maria is very knowledgeable and made sure to explain all the treatment options clearly. I really appreciated her friendly nature. The staff is equally fantastic — polite and efficient."
+    },
+    {
+      "reviewer": "Prasad Sanap",
+      "rating": 5,
+      "date": "05-07-2024",
+      "text": "One of the best dental clinics in Newtown. I recently had a root canal and scaling treatment here, it was a painless experience. Dr. Maria is very humble and professional. I had a good experience here."
+    },
+    {
+      "reviewer": "Priti Bera",
+      "rating": 5,
+      "date": "18-07-2024",
+      "text": "I recently had a root canal treatment done by Dr. Maria, and I am highly satisfied with the experience. Dr. Maria demonstrated exceptional skill and professionalism throughout the procedure. The facility was clean. Overall, a positive and pain-free dental experience."
+    },
+    {
+      "reviewer": "Ehtesham Alam",
+      "rating": 5,
+      "date": "25-07-2024",
+      "text": "Amazing experience! Had a root canal here and it was painless. The staff is friendly, the clinic is clean, and the dentist is excellent. Highly recommend! 🦷"
+    },
+    {
+      "reviewer": "Tamoha Singh",
+      "rating": 5,
+      "date": "09-08-2025",
+      "text": "My first experience at a dental clinic — very well treated and professional. Dr. is very patient and kind, and job well done."
+    },
+    {
+      "reviewer": "Himadri Kheto",
+      "rating": 5,
+      "date": "02-07-2024",
+      "text": "Highly recommended. One of the best dental clinics in the Newtown area. Well behaved, highly professional."
+    },
+    {
+      "reviewer": "K Srikanth",
+      "rating": 5,
+      "date": "11-10-2025",
+      "text": "Had a good treatment and very friendly dentist."
+    },
+    {
+      "reviewer": "Saheli Saha",
+      "rating": 5,
+      "date": "29-06-2024",
+      "text": "Very professional and humble doctor. Without any second thought you can visit here. Overall amazing experience!"
+    },
+    {
+      "reviewer": "Sumaiya Tarannum",
+      "rating": 5,
+      "date": "16-08-2024",
+      "text": "I went to Kolkata for a trip. During that time I experienced severe gum pain. Doctor advised me scaling. Feeling better after that."
+    },
+    {
+      "reviewer": "Kencho Dorji",
+      "rating": 5,
+      "date": "23-10-2025",
+      "text": "Me and my brother are happy to get good and affordable service. Dentist is kind and friendly."
+    },
+    {
+      "reviewer": "MOHAMED MAHEER",
+      "rating": 5,
+      "date": "07-09-2024",
+      "text": "I had a root canal treatment, I'm very satisfied. Humble doctor."
+    },
+    {
+      "reviewer": "Ishtiaque Ahmed",
+      "rating": 4,
+      "date": "13-11-2024",
+      "text": "The whole procedure was painless. Doctor's visit fee is 200/-."
+    },
+    {
+      "reviewer": "Abdul Mannan Khan",
+      "rating": 5,
+      "date": "21-12-2024",
+      "text": "Best place for all oral care at a reasonable price."
+    },
+    {
+      "reviewer": "Firdus Ahmed",
+      "rating": 5,
+      "date": "04-08-2024",
+      "text": "Bahut achcha filling lagayen. (Very nice, got a good filling done.)"
+    },
+    {
+      "reviewer": "sk shahid ali",
+      "rating": 5,
+      "date": "17-10-2024",
+      "text": "Best scaling experience. Thanks to doc."
+    },
+    {
+      "reviewer": "Shadman Latif",
+      "rating": 5,
+      "date": "26-05-2024",
+      "text": "Experienced specialist and updated equipment."
+    },
+    {
+      "reviewer": "Nashidul Islam",
+      "rating": 5,
+      "date": "26-06-2026",
+      "text": "Very good experience and very helpful, thank you so much madam."
+    },
+    {
+      "reviewer": "Sultan Ul Arefin",
+      "rating": 4,
+      "date": "10-07-2024",
+      "text": "RCT koralam. Nice doctor. (Got my RCT done here — nice doctor.)"
+    }
+  ]
+}

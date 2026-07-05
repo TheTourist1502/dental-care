@@ -2,9 +2,12 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { Icon } from '@iconify/react'
 import { motion, useInView } from 'framer-motion'
-import reviews from '@/data/reviews.json'
+import reviewsData from '@/data/reviews.json'
 import { CLINIC } from '@/lib/clinic'
 import styles from './index.module.css'
+
+const { totalReviews, rating, reviews: allReviews } = reviewsData
+const reviews = [...allReviews].sort((a, b) => b.rating - a.rating).slice(0, 10)
 
 const AVATAR_COLORS = [
   '#e8453c', '#d81b60', '#8e24aa', '#3949ab', '#1e88e5',
@@ -57,10 +60,6 @@ export default function Reviews() {
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
 
-  const average = (
-    reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-  ).toFixed(1)
-
   const measure = useCallback(() => {
     const el = trackRef.current
     if (!el) return
@@ -90,10 +89,10 @@ export default function Reviews() {
             <h2 className={styles.heading}>What Our Patients Say</h2>
             <div className={styles.summary}>
               <GoogleLogo size={22} />
-              <strong className={styles.avg}>{average}</strong>
+              <strong className={styles.avg}>{rating.toFixed(1)}</strong>
               <Stars count={5} />
               <span className={styles.count}>
-                from {reviews.length}+ Google reviews
+                from {totalReviews}+ Google reviews
               </span>
             </div>
           </div>
