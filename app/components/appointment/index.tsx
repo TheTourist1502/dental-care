@@ -47,7 +47,7 @@ function downloadIcs(form: Form) {
     'VERSION:2.0',
     'PRODID:-//Dr Maria Dental//Booking//EN',
     'BEGIN:VEVENT',
-    `UID:${Date.now()}@drmariadental.in`,
+    `UID:${Date.now()}@drmaria-dental-clinic.com`,
     `DTSTAMP:${stamp(new Date())}`,
     `DTSTART:${stamp(start)}`,
     `DTEND:${stamp(end)}`,

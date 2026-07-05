@@ -13,7 +13,7 @@ export const CLINIC = {
   email: 'contact.drmariadenatlclinic@gmail.com',
   address: 'Laskarati Bazar, Baligori Rd, Behind Unitech Gate 2, Newtown, Kolkata 700156',
   mapsUrl: 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
-  siteUrl: 'https://drmariadental.in',
+  siteUrl: 'https://drmaria-dental-clinic.com',
 } as const
 
 export const TIME_SLOTS = [

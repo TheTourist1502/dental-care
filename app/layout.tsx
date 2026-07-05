@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Inter_Tight } from 'next/font/google'
+import { CLINIC } from '@/lib/clinic'
 import './styles/globals.css'
 
 const inter = Inter({
@@ -15,7 +16,7 @@ const interTight = Inter_Tight({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://drmariadental.in'),
+  metadataBase: new URL(CLINIC.siteUrl),
   title: "Best Dentist in Newtown, Kolkata | Dr. Maria's Dental Clinic",
   description:
     "Dr. Maria's Multi-speciality Dental Clinic near Unitech Gate 2, Newtown. Expert Root Canal, Implants, & Braces. Book your appointment in Kolkata today.",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     'pediatric dentist Newtown',
   ],
   alternates: {
-    canonical: 'https://drmariadental.in',
+    canonical: CLINIC.siteUrl,
   },
   robots: {
     index: true,
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Dr. Maria's Multi-Speciality Dental Clinic | Newtown, Kolkata",
     description: 'Expert dental care behind Unitech Gate 2, Newtown. Book your appointment today.',
-    url: 'https://drmariadental.in',
+    url: CLINIC.siteUrl,
     type: 'website',
     locale: 'en_IN',
     siteName: "Dr. Maria's Dental Clinic",
@@ -92,14 +93,14 @@ export default function RootLayout({
               name: "Dr. Maria's Multi-Speciality Dental Clinic",
               description: "Multi-speciality dental clinic in Newtown, Kolkata offering root canal treatment, dental implants, braces, pediatric dentistry and more. Located behind Unitech Gate 2, Laskarati Bazar.",
               image: [
-                'https://drmariadental.in/images/clinic.webp',
-                'https://drmariadental.in/images/doctor.webp',
+                `${CLINIC.siteUrl}/images/clinic.webp`,
+                `${CLINIC.siteUrl}/images/doctor.webp`,
               ],
               '@id': 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
-              url: 'https://drmariadental.in',
+              url: CLINIC.siteUrl,
               hasMap: 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
-              telephone: '+918102175261',
-              email: 'contact@drmariadental.in',
+              telephone: CLINIC.phoneE164,
+              email: CLINIC.email,
               priceRange: '₹₹',
               address: {
                 '@type': 'PostalAddress',

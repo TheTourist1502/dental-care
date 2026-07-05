@@ -2,13 +2,14 @@
 import { Icon } from '@iconify/react'
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { CLINIC } from '@/lib/clinic'
 import styles from './index.module.css'
 
 const CONTACT = [
   { icon: 'solar:map-point-linear', title: 'Address', detail: 'Laskarati Bazar, Baligori Rd, Newtown\nKolkata, West Bengal 700156\n(Behind Unitech Gate 2)' },
   { icon: 'solar:phone-linear', title: 'Phone', detail: '+91 81021 75261 (Call / WhatsApp)' },
   { icon: 'solar:clock-circle-linear', title: 'Hours', detail: 'Mon–Tue: 4:00 PM – 9:00 PM\nWed–Sun: 9:00 AM – 2:00 PM, 5:00 PM – 9:00 PM' },
-  { icon: 'solar:letter-linear', title: 'Email', detail: 'contact@drmariadental.in' },
+  { icon: 'solar:letter-linear', title: 'Email', detail: CLINIC.email },
 ]
 
 const MAPS_URL = 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29'
