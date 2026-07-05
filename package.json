@@ -5,12 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "worker:dev": "npm run build && wrangler dev"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
-    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@iconify/react": "^6.0.2",
+    "@marsidev/react-turnstile": "^1.5.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.0.0",
     "next": "^16.2.9",

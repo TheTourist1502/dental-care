@@ -18,7 +18,7 @@ interface Fetcher {
 interface Env {
   ASSETS: Fetcher
   RATE_LIMIT_KV: KVNamespace
-  HCAPTCHA_SECRET: string
+  TURNSTILE_SECRET: string
   EMAILJS_SERVICE_ID: string
   EMAILJS_PUBLIC_KEY: string
   EMAILJS_PRIVATE_KEY: string
@@ -73,10 +73,10 @@ async function handleBook(request: Request, env: Env): Promise<Response> {
 
   // 2. Verify the human server-side — a client-only captcha widget can't
   // stop someone who calls this endpoint (or EmailJS) directly with a script.
-  const verifyRes = await fetch('https://api.hcaptcha.com/siteverify', {
+  const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ secret: env.HCAPTCHA_SECRET, response: captchaToken }),
+    body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: captchaToken }),
   })
   const verifyData = (await verifyRes.json()) as { success: boolean; 'error-codes'?: string[] }
   if (!verifyData.success) {

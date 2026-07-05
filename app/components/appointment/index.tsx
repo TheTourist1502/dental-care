@@ -2,18 +2,18 @@
 import { Icon } from '@iconify/react'
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import HCaptcha from '@hcaptcha/react-hcaptcha'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { bookingSchema, normalizePhone } from '@/lib/validations'
 import { CLINIC, TIME_SLOTS, buildWhatsAppUrl } from '@/lib/clinic'
 import Calendar, { formatDisplayDate } from '@/app/components/ui/calendar'
 import Dropdown from '@/app/components/ui/dropdown'
 import styles from './index.module.css'
 
-// hCaptcha's official published TEST site key — always passes, safe for
-// dev. Get a real one free at https://dashboard.hcaptcha.com after signup
-// and set NEXT_PUBLIC_HCAPTCHA_SITE_KEY in .env.local before going live.
-const HCAPTCHA_SITE_KEY =
-  process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || '10000000-ffff-ffff-ffff-000000000001'
+// Cloudflare's official published TEST site key — always passes, safe for
+// dev. Get a real one free at https://dash.cloudflare.com/?to=/:account/turnstile
+// and set NEXT_PUBLIC_TURNSTILE_SITE_KEY in .env.local before going live.
+const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 
 const WHY_ITEMS = [
   { icon: 'solar:clock-circle-linear', title: 'Minimal Wait Times', desc: 'Punctual appointments — your time is respected.' },
@@ -72,7 +72,7 @@ export default function AppointmentForm() {
   const [patientEmailSent, setPatientEmailSent] = useState(false)
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [captchaError, setCaptchaError] = useState('')
-  const captchaRef = useRef<HCaptcha>(null)
+  const captchaRef = useRef<TurnstileInstance>(null)
 
   const sectionRef = useRef(null)
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
@@ -145,7 +145,7 @@ export default function AppointmentForm() {
 
     try {
       // Sending happens server-side (Cloudflare Function) so the EmailJS
-      // private key and hCaptcha secret never reach the browser, and the
+      // private key and Turnstile secret never reach the browser, and the
       // function can rate-limit by IP before spending a send.
       const res = await fetch('/api/book', {
         method: 'POST',
@@ -162,7 +162,7 @@ export default function AppointmentForm() {
     } catch {
       setStatus('fallback')
     } finally {
-      captchaRef.current?.resetCaptcha()
+      captchaRef.current?.reset()
       setCaptchaToken(null)
     }
   }
@@ -174,7 +174,7 @@ export default function AppointmentForm() {
     setPatientEmailSent(false)
     setCaptchaToken(null)
     setCaptchaError('')
-    captchaRef.current?.resetCaptcha()
+    captchaRef.current?.reset()
   }
 
   const submitted = status === 'sent' || status === 'fallback'
@@ -330,10 +330,10 @@ export default function AppointmentForm() {
               </div>
 
               <div className={styles.captchaWrap}>
-                <HCaptcha
+                <Turnstile
                   ref={captchaRef}
-                  sitekey={HCAPTCHA_SITE_KEY}
-                  onVerify={(token) => {
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onSuccess={(token) => {
                     setCaptchaToken(token)
                     setCaptchaError('')
                   }}
