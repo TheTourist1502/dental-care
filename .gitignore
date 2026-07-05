@@ -2,6 +2,7 @@ node_modules
 .next
 .env
 .env*.local
+.dev.vars
 out
 .env.example
 .claude
