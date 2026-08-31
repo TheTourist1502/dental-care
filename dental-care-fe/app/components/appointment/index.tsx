@@ -22,8 +22,8 @@ const WHY_ITEMS = [
   { icon: 'solar:shield-check-linear', title: 'No Advance Payment', desc: 'Pay at the clinic after your visit — book risk-free.' },
 ]
 
-type Form = { name: string; phone: string; email: string; date: string; timeSlot: string }
-const INITIAL: Form = { name: '', phone: '', email: '', date: '', timeSlot: '' }
+type Form = { name: string; phone: string; date: string; timeSlot: string }
+const INITIAL: Form = { name: '', phone: '', date: '', timeSlot: '' }
 type Status = 'idle' | 'sending' | 'sent' | 'fallback'
 
 function slotStart(slot: string): { h: number; m: number } {
@@ -69,7 +69,6 @@ export default function AppointmentForm() {
   const [form, setForm] = useState<Form>(INITIAL)
   const [errors, setErrors] = useState<Partial<Record<keyof Form, string>>>({})
   const [status, setStatus] = useState<Status>('idle')
-  const [patientEmailSent, setPatientEmailSent] = useState(false)
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [captchaError, setCaptchaError] = useState('')
   const captchaRef = useRef<TurnstileInstance>(null)
@@ -92,7 +91,6 @@ export default function AppointmentForm() {
       `New Appointment Request\n\n` +
       `Name: ${form.name}\n` +
       `Phone: +91 ${normalizePhone(form.phone)}\n` +
-      (form.email ? `Email: ${form.email}\n` : '') +
       `Date: ${formatDisplayDate(form.date)}\n` +
       `Time: ${form.timeSlot}`
     )
@@ -120,41 +118,23 @@ export default function AppointmentForm() {
     setStatus('sending')
 
     const templateParams = {
-      // Shared
       patient_name: form.name,
       patient_phone: `+91 ${normalizePhone(form.phone)}`,
-      patient_email: form.email || 'Not provided',
-      to_email: form.email,
       appointment_date: formatDisplayDate(form.date),
       time_slot: form.timeSlot,
-      website_url: CLINIC.siteUrl,
-      logo_url: `${CLINIC.siteUrl}/images/logo.png`,
-      // Admin template only
-      doctor_name: CLINIC.doctorName,
-      admin_email: CLINIC.email,
-      booking_source: 'Website booking form',
-      submitted_at: new Date().toLocaleString('en-IN', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-        timeZone: 'Asia/Kolkata',
-      }),
-      // Patient template only
-      clinic_phone: CLINIC.phoneDisplay,
-      clinic_address: CLINIC.address,
     }
 
     try {
       // Sending happens server-side (Cloudflare Function) so the EmailJS
       // private key and Turnstile secret never reach the browser, and the
       // function can rate-limit by IP before spending a send.
-      const res = await fetch('/api/book', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? ''}/api/book`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: form.email, captchaToken, templateParams }),
+        body: JSON.stringify({ captchaToken, templateParams }),
       })
-      const data: { success: boolean; sentTo?: 'patient' | 'admin' } = await res.json()
+      const data: { success: boolean } = await res.json()
       if (data.success) {
-        setPatientEmailSent(data.sentTo === 'patient')
         setStatus('sent')
       } else {
         setStatus('fallback')
@@ -171,7 +151,6 @@ export default function AppointmentForm() {
     setForm(INITIAL)
     setErrors({})
     setStatus('idle')
-    setPatientEmailSent(false)
     setCaptchaToken(null)
     setCaptchaError('')
     captchaRef.current?.reset()
@@ -238,8 +217,7 @@ export default function AppointmentForm() {
               </h3>
               <p className={styles.confirmText}>
                 {status === 'sent'
-                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on ${'+91 ' + normalizePhone(form.phone)} shortly.` +
-                    (patientEmailSent ? ` A confirmation has also been emailed to ${form.email}.` : '')
+                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on ${'+91 ' + normalizePhone(form.phone)} shortly.`
                   : 'We could not send your request automatically. Send it on WhatsApp instead — it takes one tap and your details are pre-filled.'}
               </p>
               <div className={styles.confirmActions}>
@@ -289,19 +267,6 @@ export default function AppointmentForm() {
                   value={form.phone}
                   onChange={(e) => set('phone', e.target.value)}
                   className={errors.phone ? styles.inputError : styles.input}
-                />
-              </Field>
-
-              <Field label="Email (optional)" htmlFor="bk-email" error={errors.email}>
-                <input
-                  id="bk-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="For an email confirmation too"
-                  value={form.email}
-                  onChange={(e) => set('email', e.target.value)}
-                  className={errors.email ? styles.inputError : styles.input}
                 />
               </Field>
 

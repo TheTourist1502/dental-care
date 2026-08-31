@@ -31,16 +31,6 @@ export const bookingSchema = z.object({
       'Please enter a valid 10-digit mobile number'
     ),
 
-  // Optional — the WhatsApp/phone confirmation already covers patients
-  // who don't have or don't want to share an email.
-  email: z
-    .string()
-    .trim()
-    .refine(
-      (val) => val === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
-      'Please enter a valid email address'
-    ),
-
   date: z
     .string()
     .min(1, 'Please pick a date')

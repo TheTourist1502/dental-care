@@ -1,0 +1,85 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter test *)",
+      "Bash(bash scripts/check_env.sh)",
+      "Bash(dart format *)",
+      "Bash(grep -n \"Expanded\\(\\\\s*$\\\\|Align\\(\\\\s*$\\\\|alignment: Alignment.centerRight\" -A1 lib/features/households/presentation/screens/households_list_screen.dart lib/features/households_detailed_view/presentation/widgets/households_transactions_tab.dart lib/features/households_detailed_view/presentation/widgets/households_accounts_tab.dart lib/features/account_detail_view/presentation/widgets/account_detail_positions_tab.dart lib/features/account_detail_view/presentation/widgets/account_detail_transactions_tab.dart lib/features/view_transactions/presentation/screens/view_transaction_screen.dart lib/features/accounts/presentation/screens/accounts_screen.dart lib/features/real_time_detailed_view/presentation/widgets/real_time_positions_tab.dart lib/features/real_time_detailed_view/presentation/widgets/real_time_transactions_tab.dart)",
+      "mcp__figma__get_variable_defs"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "headroom init hook ensure",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "headroom init hook ensure",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,os,sys; fp=json.loads(os.environ.get('CLAUDE_TOOL_INPUT','{}') or '{}').get('file_path',''); base=os.path.basename(fp); [print(f'Blocked: {fp} contains UAT/prod secrets — get values from 1Password if needed'),sys.exit(2)] if any(x in fp for x in ['env.uat.json','env.prod.json']) else ([print(f'Blocked: {fp} is a Firebase config file with project secrets — never read it'),sys.exit(2)] if base in ['google-services.json','GoogleService-Info.plist'] else None)\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,os,sys; cmd=json.loads(os.environ.get('CLAUDE_TOOL_INPUT','{}') or '{}').get('command',''); [print('Blocked: command touches UAT/prod secrets file — get values from 1Password if needed'),sys.exit(2)] if any(x in cmd for x in ['env.uat.json','env.prod.json']) else ([print('Blocked: command touches a Firebase config file with project secrets — never read it'),sys.exit(2)] if any(x in cmd for x in ['google-services.json','GoogleService-Info.plist']) else None)\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,os,subprocess; fp=json.loads(os.environ.get('CLAUDE_TOOL_INPUT','{}') or '{}').get('file_path',''); fp.endswith('.dart') and subprocess.run(['dart','format',fp])\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "flutter analyze --no-pub 2>&1 | tail -20"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true
+  }
+}
