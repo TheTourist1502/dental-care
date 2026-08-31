@@ -43,8 +43,15 @@ npx wrangler secret put TELEGRAM_CHAT_ID
 
 ## Local dev
 
+Create `.dev.vars` (gitignored, auto-loaded by `wrangler dev`):
+
+```
+TURNSTILE_SECRET=...
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_CHAT_ID=...
+```
+
 ```bash
-cp .dev.vars.example .dev.vars   # fill values
 npm run dev                      # http://localhost:8787/api/book
 ```
 
