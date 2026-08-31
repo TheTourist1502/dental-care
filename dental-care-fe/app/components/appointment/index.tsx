@@ -86,7 +86,18 @@ export default function AppointmentForm() {
     if (errors[field]) setErrors((e) => ({ ...e, [field]: undefined }))
   }
 
+  // On success the clinic already has the booking (Telegram + D1), so this is
+  // just a warm opener. On fallback the API failed — send the full details so
+  // the clinic can book it manually.
   function whatsAppMessage() {
+    if (status === 'sent') {
+      return (
+        `Hello Dr. Maria, this is ${form.name}.\n\n` +
+        `I've just booked an appointment through your website for ` +
+        `${formatDisplayDate(form.date)} at ${form.timeSlot}. ` +
+        `Looking forward to my visit!`
+      )
+    }
     return (
       `New Appointment Request\n\n` +
       `Name: ${form.name}\n` +
@@ -237,6 +248,7 @@ export default function AppointmentForm() {
                   </button>
                 )}
                 <button type="button" className={styles.confirmLink} onClick={reset}>
+                  <Icon icon="solar:refresh-linear" width={16} height={16} />
                   Book another appointment
                 </button>
               </div>
@@ -320,7 +332,10 @@ export default function AppointmentForm() {
                     Booking…
                   </span>
                 ) : (
-                  'Book Appointment'
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                    <Icon icon="solar:calendar-add-linear" width={18} height={18} />
+                    Book Appointment
+                  </span>
                 )}
               </button>
 

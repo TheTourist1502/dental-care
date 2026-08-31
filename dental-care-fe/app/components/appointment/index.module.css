@@ -241,6 +241,9 @@
   text-underline-offset: 2px;
   cursor: pointer;
   padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .confirmLink:hover {

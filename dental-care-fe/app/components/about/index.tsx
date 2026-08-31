@@ -75,6 +75,7 @@ export default function About() {
           </ul>
 
           <a href="#appointment" className={styles.btnPrimary}>
+            <Icon icon="solar:stethoscope-linear" width={18} height={18} />
             Book a Consultation
           </a>
         </motion.div>

@@ -134,6 +134,14 @@
   font-weight: 700;
   color: var(--color-ink);
   letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.priceStar {
+  color: var(--apple-blue);
+  flex-shrink: 0;
 }
 
 .unit {

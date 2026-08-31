@@ -51,7 +51,10 @@ export default function Pricing() {
                   <span className={styles.original}>
                     ₹{inr.format(item.originalPrice)}
                   </span>
-                  <span className={styles.price}>₹{inr.format(item.price)}</span>
+                  <span className={styles.price}>
+                    ₹{inr.format(item.price)}
+                    <span className={styles.priceStar}>*</span>
+                  </span>
                   <span className={styles.unit}>{item.unit}</span>
                 </div>
                 <a href="#appointment" className={styles.cta}>
@@ -63,7 +66,11 @@ export default function Pricing() {
           })}
         </div>
 
-        <p className={styles.note}>{pricing.note.split('.')[0]}. Final cost is confirmed after clinical examination.</p>
+        <p className={styles.note}>
+          <span className={styles.priceStar}>*</span>
+          Starting prices in INR. Your final cost depends on the treatment
+          needed and is confirmed after a checkup, before we begin.
+        </p>
       </div>
     </section>
   )

@@ -59,6 +59,7 @@ export default function Hero() {
           animate="show"
         >
           <a href="#appointment" className={styles.btnPrimary}>
+            <Icon icon="solar:calendar-add-linear" width={18} height={18} />
             Book Appointment
           </a>
           <a href="#services" className={styles.btnSecondary}>

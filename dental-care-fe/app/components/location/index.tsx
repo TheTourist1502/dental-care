@@ -66,6 +66,7 @@ export default function Location() {
             rel="noopener noreferrer"
             className={styles.btnPrimary}
           >
+            <Icon icon="solar:routing-2-linear" width={18} height={18} />
             Get Directions
           </a>
         </motion.div>
