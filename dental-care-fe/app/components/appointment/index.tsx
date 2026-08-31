@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
-import { bookingSchema, normalizePhone } from '@/lib/validations'
+import { bookingSchema } from '@/lib/validations'
 import { CLINIC, TIME_SLOTS, buildWhatsAppUrl } from '@/lib/clinic'
 import Calendar, { formatDisplayDate } from '@/app/components/ui/calendar'
 import Dropdown from '@/app/components/ui/dropdown'
@@ -90,7 +90,7 @@ export default function AppointmentForm() {
     return (
       `New Appointment Request\n\n` +
       `Name: ${form.name}\n` +
-      `Phone: +91 ${normalizePhone(form.phone)}\n` +
+      `Phone: +91 ${form.phone}\n` +
       `Date: ${formatDisplayDate(form.date)}\n` +
       `Time: ${form.timeSlot}`
     )
@@ -119,7 +119,7 @@ export default function AppointmentForm() {
 
     const templateParams = {
       patient_name: form.name,
-      patient_phone: `+91 ${normalizePhone(form.phone)}`,
+      patient_phone: form.phone,
       appointment_date: formatDisplayDate(form.date),
       time_slot: form.timeSlot,
     }
@@ -217,7 +217,7 @@ export default function AppointmentForm() {
               </h3>
               <p className={styles.confirmText}>
                 {status === 'sent'
-                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on ${'+91 ' + normalizePhone(form.phone)} shortly.`
+                  ? `Thanks ${form.name.split(' ')[0]} — we've got your request for ${formatDisplayDate(form.date)}, ${form.timeSlot}. We'll confirm on +91 ${form.phone} shortly.`
                   : 'We could not send your request automatically. Send it on WhatsApp instead — it takes one tap and your details are pre-filled.'}
               </p>
               <div className={styles.confirmActions}>
@@ -249,6 +249,7 @@ export default function AppointmentForm() {
                   name="name"
                   type="text"
                   autoComplete="name"
+                  maxLength={40}
                   placeholder="Your name"
                   value={form.name}
                   onChange={(e) => set('name', e.target.value)}
@@ -263,9 +264,10 @@ export default function AppointmentForm() {
                   type="tel"
                   inputMode="numeric"
                   autoComplete="tel"
+                  maxLength={10}
                   placeholder="10-digit mobile number"
                   value={form.phone}
-                  onChange={(e) => set('phone', e.target.value)}
+                  onChange={(e) => set('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
                   className={errors.phone ? styles.inputError : styles.input}
                 />
               </Field>
@@ -312,7 +314,14 @@ export default function AppointmentForm() {
                 className={styles.submitBtn}
                 disabled={status === 'sending'}
               >
-                {status === 'sending' ? 'Booking…' : 'Book Appointment'}
+                {status === 'sending' ? (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                    <Icon icon="svg-spinners:180-ring" width={18} height={18} />
+                    Booking…
+                  </span>
+                ) : (
+                  'Book Appointment'
+                )}
               </button>
 
               <p className={styles.privacyNote}>

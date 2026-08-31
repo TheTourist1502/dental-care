@@ -82,6 +82,12 @@ async function handleBook(request: Request, env: Env, cors: Record<string, strin
   if (!p.patient_name || !p.patient_phone || !p.appointment_date || !p.time_slot) {
     return json({ success: false, message: 'Missing booking fields' }, 400, cors)
   }
+  if (!/^\d{10}$/.test(p.patient_phone)) {
+    return json({ success: false, message: 'Phone must be exactly 10 digits' }, 400, cors)
+  }
+  if (p.patient_name.length > 40) {
+    return json({ success: false, message: 'Name too long' }, 400, cors)
+  }
 
   // 1. Rate limit by IP — reserve the slot immediately so failed attempts still count.
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown'
@@ -128,7 +134,7 @@ async function handleBook(request: Request, env: Env, cors: Record<string, strin
     env,
     `New booking request\n` +
       `Name: ${p.patient_name}\n` +
-      `Phone: ${p.patient_phone}\n` +
+      `Phone: +91 ${p.patient_phone}\n` +
       `Date: ${p.appointment_date}\n` +
       `Time: ${p.time_slot}`
   ).catch(() => false)
