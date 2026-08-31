@@ -43,7 +43,7 @@ npx wrangler secret put TELEGRAM_CHAT_ID
 
 ## Local dev
 
-Create `.dev.vars` (gitignored, auto-loaded by `wrangler dev`):
+Create `.env` (gitignored, auto-loaded by `wrangler dev`):
 
 ```
 TURNSTILE_SECRET=...
