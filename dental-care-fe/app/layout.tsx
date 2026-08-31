@@ -141,8 +141,8 @@ export default function RootLayout({
               ],
               sameAs: [
                 'https://maps.app.goo.gl/7srQyKdNtGLcaKG29',
-                'https://www.instagram.com/drmariadental',
-                'https://www.facebook.com/drmariadental',
+                // 'https://www.instagram.com/drmariadental',
+                // 'https://www.facebook.com/drmariadental',
               ],
             }),
           }}

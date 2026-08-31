@@ -22,8 +22,8 @@ const CONTACT_LINKS = [
 ]
 
 const SOCIALS = [
-  { icon: 'brandico:facebook', label: 'Facebook', href: 'https://www.facebook.com/drmariadental' },
-  { icon: 'brandico:instagram', label: 'Instagram', href: 'https://www.instagram.com/drmariadental' },
+  // { icon: 'brandico:facebook', label: 'Facebook', href: 'https://www.facebook.com/drmariadental' },
+  // { icon: 'brandico:instagram', label: 'Instagram', href: 'https://www.instagram.com/drmariadental' },
   { icon: 'ic:baseline-whatsapp', label: 'WhatsApp', href: buildWhatsAppUrl('Hi!') },
   { icon: 'solar:map-point-bold', label: 'Google Maps', href: CLINIC.mapsUrl },
 ]
