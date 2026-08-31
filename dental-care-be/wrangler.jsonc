@@ -3,32 +3,23 @@
   "main": "src/index.ts",
   "compatibility_date": "2024-09-01",
 
-  // --- Rate limiting store ---
-  // Create:  npx wrangler kv namespace create RATE_LIMIT_KV
-  // then paste the printed id below.
   "kv_namespaces": [
-    { "binding": "RATE_LIMIT_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+    { "binding": "RATE_LIMIT_KV", "id": "3bc8a00a962a490fb65c23903f5958ac" }
   ],
 
-  // --- Bookings database ---
-  // Create:  npx wrangler d1 create dental-care-bookings
-  // then paste the printed database_id below.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "dental-care-bookings",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+      "database_id": "fbf82af9-9984-4f55-a9e0-8c7b22689758"
     }
   ],
 
-  // Non-secret config.
   "vars": {
     // Origins allowed to call this API (comma-separated, no trailing slash).
     "ALLOWED_ORIGINS": "http://localhost:3000,https://drmaria-dental-clinic.com"
   }
 
-  // Secrets (set with `npx wrangler secret put <NAME>`, never commit):
-  //   TURNSTILE_SECRET     - Turnstile secret key (Cloudflare dashboard)
-  //   TELEGRAM_BOT_TOKEN   - from @BotFather
-  //   TELEGRAM_CHAT_ID     - clinic chat/group id the bot posts into
+  // Secrets (set with `npx wrangler secret put <NAME>`):
+  //   TURNSTILE_SECRET  TELEGRAM_BOT_TOKEN  TELEGRAM_CHAT_ID
 }
