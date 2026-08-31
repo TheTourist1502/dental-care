@@ -9,7 +9,6 @@
     "worker:dev": "npm run build && wrangler dev"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@iconify/react": "^6.0.2",
     "@marsidev/react-turnstile": "^1.5.3",
     "clsx": "^2.1.1",

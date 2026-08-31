@@ -11,7 +11,7 @@ import styles from './index.module.css'
 
 // Cloudflare's official published TEST site key — always passes, safe for
 // dev. Get a real one free at https://dash.cloudflare.com/?to=/:account/turnstile
-// and set NEXT_PUBLIC_TURNSTILE_SITE_KEY in .env.local before going live.
+// and set NEXT_PUBLIC_TURNSTILE_SITE_KEY in .env before going live.
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 
@@ -125,9 +125,9 @@ export default function AppointmentForm() {
     }
 
     try {
-      // Sending happens server-side (Cloudflare Function) so the EmailJS
-      // private key and Turnstile secret never reach the browser, and the
-      // function can rate-limit by IP before spending a send.
+      // Posts to the dental-care-be Worker: it verifies Turnstile with the
+      // secret (never exposed here), rate-limits by IP, stores the booking
+      // in D1, and pings the clinic on Telegram.
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? ''}/api/book`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
