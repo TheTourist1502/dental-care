@@ -17,7 +17,7 @@
 
   "vars": {
     // Origins allowed to call this API (comma-separated, no trailing slash).
-    "ALLOWED_ORIGINS": "http://localhost:3000,https://drmaria-dental-clinic.com"
+    "ALLOWED_ORIGINS": "http://localhost:3000,https://drmaria-dental-clinic.com,https://dental-care.contact-drmariadentalclinic.workers.dev"
   }
 
   // Secrets (set with `npx wrangler secret put <NAME>`):
