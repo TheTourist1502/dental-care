@@ -36,8 +36,8 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          Your Smile Deserves <br />
-          <span className={styles.accent}>Expert Care.</span>
+          Best Dentist in Newtown, Kolkata <br />
+          <span className={styles.accent}>Your Smile Deserves Expert Care.</span>
         </motion.h1>
 
         <motion.p
